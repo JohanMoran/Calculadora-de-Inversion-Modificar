@@ -207,6 +207,13 @@
       border: 1px solid #555;
     }
 
+    /* Estilos para inputs monetarios */
+    input[inputmode="decimal"] {
+      text-align: right;
+      font-family: monospace;
+      letter-spacing: 1px;
+    }
+
     /* Ajustes específicos para móvil */
     @media (max-width: 768px) {
       .input-container {
@@ -238,7 +245,7 @@
 
   <label>MONTO INICIAL:</label>
   <div class="input-container">
-    <input type="number" id="capitalInicial" />
+    <input type="text" id="capitalInicial" inputmode="decimal" pattern="[0-9,.]*" />
     <span>¿Con qué cantidad cuentas en este momento? ¿Con cuánto empezarás tu inversión?</span>
   </div>
 
@@ -256,7 +263,7 @@
 
   <label>Aportación:</label>
   <div class="input-container">
-    <input type="number" id="aportacion" />
+    <input type="text" id="aportacion" inputmode="decimal" pattern="[0-9,.]*" />
     <span>¿Cuánto puedes destinar a tu inversión periódicamente para incrementar tus rendimientos?</span>
   </div>
 
@@ -280,7 +287,7 @@
 
   <label>Capital objetivo (opcional):</label>
   <div class="input-container">
-    <input type="number" id="capitalObjetivo" placeholder="Ej: 500000" />
+    <input type="text" id="capitalObjetivo" inputmode="decimal" pattern="[0-9,.]*" placeholder="Ej: 500000" />
     <span>¿Ya tienes un objetivo (ir de viaje, comprar un auto, etc.)? Elige un monto con el que alcanzarás ese objetivo</span>
   </div>
 
@@ -319,6 +326,59 @@
     let totalAportaciones = 0, totalInteres = 0, capital = 0;
     let chart = null;
 
+    // Función para formatear inputs monetarios
+    function formatInputCurrency(input) {
+      // Obtener el valor sin formato
+      let value = input.value.replace(/[^0-9.]/g, '');
+      
+      // Convertir a número y formatear
+      if(value === '' || isNaN(value)) {
+        input.value = '';
+        return;
+      }
+      
+      let number = parseFloat(value);
+      input.value = formatCurrency(number);
+    }
+
+    // Función para convertir de formato monetario a número
+    function parseCurrency(value) {
+      if(!value) return 0;
+      const cleanValue = value.replace(/[^0-9.]/g, '');
+      return parseFloat(cleanValue) || 0;
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('es-MX', { 
+        style: 'currency', 
+        currency: 'MXN',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    }
+
+    // Configurar eventos para los inputs monetarios
+    document.getElementById('capitalInicial').oninput = function() {
+      formatInputCurrency(this);
+    };
+    document.getElementById('capitalInicial').onblur = function() {
+      formatInputCurrency(this);
+    };
+
+    document.getElementById('aportacion').oninput = function() {
+      formatInputCurrency(this);
+    };
+    document.getElementById('aportacion').onblur = function() {
+      formatInputCurrency(this);
+    };
+
+    document.getElementById('capitalObjetivo').oninput = function() {
+      formatInputCurrency(this);
+    };
+    document.getElementById('capitalObjetivo').onblur = function() {
+      formatInputCurrency(this);
+    };
+
     function toggleDarkMode() {
       document.body.classList.toggle("dark");
       if (chart) {
@@ -327,12 +387,12 @@
     }
 
     function calcular() {
-      const capitalInicial = parseFloat(document.getElementById('capitalInicial').value) || 0;
+      const capitalInicial = parseCurrency(document.getElementById('capitalInicial').value);
       const tasa = parseFloat(document.getElementById('tasa').value) || 0;
       const plazo = parseInt(document.getElementById('plazo').value) || 0;
-      const aportacion = parseFloat(document.getElementById('aportacion').value) || 0;
+      const aportacion = parseCurrency(document.getElementById('aportacion').value);
       const periodicidad = parseInt(document.getElementById('periodicidad').value) || 1;
-      const capitalObjetivo = parseFloat(document.getElementById('capitalObjetivo').value) || null;
+      const capitalObjetivo = parseCurrency(document.getElementById('capitalObjetivo').value);
       const fechaInicio = new Date(document.getElementById('fechaInicio').value);
 
       if (plazo <= 0 || tasa <= 0) {
@@ -442,15 +502,6 @@
       generarGrafico();
     }
 
-    function formatCurrency(value) {
-      return new Intl.NumberFormat('es-MX', { 
-        style: 'currency', 
-        currency: 'MXN',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(value);
-    }
-
     function generarGrafico() {
       const ctx = document.getElementById('grafica').getContext('2d');
       
@@ -525,10 +576,10 @@
       doc.rect(20, 25, 170, 30, 'F');
       doc.text("Datos de la inversión", 25, 30);
       
-      const capitalInicial = parseFloat(document.getElementById('capitalInicial').value) || 0;
+      const capitalInicial = parseCurrency(document.getElementById('capitalInicial').value);
       const tasa = parseFloat(document.getElementById('tasa').value) || 0;
       const plazo = parseInt(document.getElementById('plazo').value) || 0;
-      const aportacion = parseFloat(document.getElementById('aportacion').value) || 0;
+      const aportacion = parseCurrency(document.getElementById('aportacion').value);
       const periodicidad = parseInt(document.getElementById('periodicidad').value) || 1;
       
       let periodicidadTexto = '';
