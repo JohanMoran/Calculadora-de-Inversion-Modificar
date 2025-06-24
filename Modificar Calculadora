@@ -238,7 +238,7 @@
 
   <label>MONTO INICIAL:</label>
   <div class="input-container">
-    <input type="text" id="capitalInicial" oninput="formatCurrency(this)" onblur="addDollarSign(this)" />
+    <input type="number" id="capitalInicial" />
     <span>¿Con qué cantidad cuentas en este momento? ¿Con cuánto empezarás tu inversión?</span>
   </div>
 
@@ -256,7 +256,7 @@
 
   <label>Aportación:</label>
   <div class="input-container">
-    <input type="text" id="aportacion" oninput="formatCurrency(this)" onblur="addDollarSign(this)" />
+    <input type="number" id="aportacion" />
     <span>¿Cuánto puedes destinar a tu inversión periódicamente para incrementar tus rendimientos?</span>
   </div>
 
@@ -280,7 +280,7 @@
 
   <label>Capital objetivo (opcional):</label>
   <div class="input-container">
-    <input type="text" id="capitalObjetivo" oninput="formatCurrency(this)" onblur="addDollarSign(this)" placeholder="Ej: 500000" />
+    <input type="number" id="capitalObjetivo" placeholder="Ej: 500000" />
     <span>¿Ya tienes un objetivo (ir de viaje, comprar un auto, etc.)? Elige un monto con el que alcanzarás ese objetivo</span>
   </div>
 
@@ -326,37 +326,13 @@
       }
     }
 
-    function formatCurrency(input) {
-      // Obtener el valor sin el signo de dólar
-      let value = input.value.replace(/\D/g, '');
-      
-      // Formatear con comas
-      if (value.length > 0) {
-        value = parseInt(value, 10).toLocaleString('es-MX');
-        input.value = value;
-      }
-    }
-
-    function addDollarSign(input) {
-      // Agregar el signo de dólar solo si hay un valor
-      if (input.value && !input.value.includes('$')) {
-        input.value = '$' + input.value;
-      }
-    }
-
-    function parseCurrency(value) {
-      // Convertir el valor formateado a número
-      if (!value) return 0;
-      return parseFloat(value.replace(/\$|,/g, ''));
-    }
-
     function calcular() {
-      const capitalInicial = parseCurrency(document.getElementById('capitalInicial').value);
+      const capitalInicial = parseFloat(document.getElementById('capitalInicial').value) || 0;
       const tasa = parseFloat(document.getElementById('tasa').value) || 0;
       const plazo = parseInt(document.getElementById('plazo').value) || 0;
-      const aportacion = parseCurrency(document.getElementById('aportacion').value);
+      const aportacion = parseFloat(document.getElementById('aportacion').value) || 0;
       const periodicidad = parseInt(document.getElementById('periodicidad').value) || 1;
-      const capitalObjetivo = parseCurrency(document.getElementById('capitalObjetivo').value) || null;
+      const capitalObjetivo = parseFloat(document.getElementById('capitalObjetivo').value) || null;
       const fechaInicio = new Date(document.getElementById('fechaInicio').value);
 
       if (plazo <= 0 || tasa <= 0) {
@@ -410,9 +386,9 @@
           <tr>
             <td>${i}</td>
             <td>${fecha.toLocaleDateString('es-MX')}</td>
-            <td>${esAportacion ? formatCurrencyOutput(aportacion) : '$0.00'}</td>
-            <td>${formatCurrencyOutput(interes)}</td>
-            <td>${formatCurrencyOutput(capital)}</td>
+            <td>${esAportacion ? formatCurrency(aportacion) : '$0.00'}</td>
+            <td>${formatCurrency(interes)}</td>
+            <td>${formatCurrency(capital)}</td>
           </tr>
         `;
 
@@ -430,13 +406,13 @@
 
       document.getElementById('resultado').innerHTML = `
         <strong>Resumen de Inversión:</strong><br>
-        Capital inicial: ${formatCurrencyOutput(capitalInicial)}<br>
+        Capital inicial: ${formatCurrency(capitalInicial)}<br>
         Tasa de interés anual: ${tasa}%<br>
         Plazo: ${meses} meses<br>
-        Aportación ${periodicidadTexto}: ${formatCurrencyOutput(aportacion)}<br>
-        Total aportado: ${formatCurrencyOutput(totalAportaciones)}<br>
-        Total interés generado: ${formatCurrencyOutput(totalInteres)}<br>
-        <strong>Total al final del plazo: ${formatCurrencyOutput(capital)}</strong>
+        Aportación ${periodicidadTexto}: ${formatCurrency(aportacion)}<br>
+        Total aportado: ${formatCurrency(totalAportaciones)}<br>
+        Total interés generado: ${formatCurrency(totalInteres)}<br>
+        <strong>Total al final del plazo: ${formatCurrency(capital)}</strong>
       `;
 
       if (cumpleObjetivo) {
@@ -456,7 +432,7 @@
         }
 
         document.getElementById('resumenFinal').innerHTML = `
-          🎉 <strong>¡Objetivo de ${formatCurrencyOutput(capitalObjetivo)} alcanzado en ${textoMeses}!</strong>
+          🎉 <strong>¡Objetivo de ${formatCurrency(capitalObjetivo)} alcanzado en ${textoMeses}!</strong>
         `;
       }
 
@@ -466,7 +442,7 @@
       generarGrafico();
     }
 
-    function formatCurrencyOutput(value) {
+    function formatCurrency(value) {
       return new Intl.NumberFormat('es-MX', { 
         style: 'currency', 
         currency: 'MXN',
@@ -504,7 +480,7 @@
             tooltip: {
               callbacks: {
                 label: (context) => {
-                  return ` ${formatCurrencyOutput(context.raw)}`;
+                  return ` ${formatCurrency(context.raw)}`;
                 }
               }
             }
@@ -513,7 +489,7 @@
             y: {
               beginAtZero: false,
               ticks: {
-                callback: (value) => formatCurrencyOutput(value)
+                callback: (value) => formatCurrency(value)
               }
             }
           }
@@ -549,10 +525,10 @@
       doc.rect(20, 25, 170, 30, 'F');
       doc.text("Datos de la inversión", 25, 30);
       
-      const capitalInicial = parseCurrency(document.getElementById('capitalInicial').value);
+      const capitalInicial = parseFloat(document.getElementById('capitalInicial').value) || 0;
       const tasa = parseFloat(document.getElementById('tasa').value) || 0;
       const plazo = parseInt(document.getElementById('plazo').value) || 0;
-      const aportacion = parseCurrency(document.getElementById('aportacion').value);
+      const aportacion = parseFloat(document.getElementById('aportacion').value) || 0;
       const periodicidad = parseInt(document.getElementById('periodicidad').value) || 1;
       
       let periodicidadTexto = '';
@@ -564,17 +540,17 @@
         case 12: periodicidadTexto = 'anual'; break;
       }
 
-      doc.text(`Capital inicial: ${formatCurrencyOutput(capitalInicial)}`, 25, 37);
+      doc.text(`Capital inicial: ${formatCurrency(capitalInicial)}`, 25, 37);
       doc.text(`Tasa anual: ${tasa}% | Plazo: ${plazo} meses`, 25, 44);
-      doc.text(`Aportación ${periodicidadTexto}: ${formatCurrencyOutput(aportacion)}`, 25, 51);
+      doc.text(`Aportación ${periodicidadTexto}: ${formatCurrency(aportacion)}`, 25, 51);
       
       doc.setFillColor(230, 245, 230);
       doc.rect(20, 60, 170, 20, 'F');
       doc.text("Resultados finales", 25, 65);
-      doc.text(`Total aportado: ${formatCurrencyOutput(totalAportaciones)}`, 25, 72);
-      doc.text(`Interés generado: ${formatCurrencyOutput(totalInteres)}`, 100, 72);
+      doc.text(`Total aportado: ${formatCurrency(totalAportaciones)}`, 25, 72);
+      doc.text(`Interés generado: ${formatCurrency(totalInteres)}`, 100, 72);
       doc.setFont('helvetica', 'bold');
-      doc.text(`Total acumulado: ${formatCurrencyOutput(capital)}`, 25, 79);
+      doc.text(`Total acumulado: ${formatCurrency(capital)}`, 25, 79);
       doc.setFont('helvetica', 'normal');
 
       setTimeout(() => {
@@ -622,8 +598,8 @@
       
       rows.forEach(row => {
         const cells = row.querySelectorAll('td');
-        const aportacionValue = cells[2].textContent === '$0.00' ? '0' : parseCurrency(cells[2].textContent);
-        csv += `"${cells[0].textContent}","${cells[1].textContent}","${aportacionValue}","${cells[3].textContent.replace('$','').replace(/,/g,'')}","${cells[4].textContent.replace('$','').replace(/,/g,'')}"\n`;
+        const aportacionValue = cells[2].textContent === '$0.00' ? '0' : cells[2].textContent.replace('$','');
+        csv += `"${cells[0].textContent}","${cells[1].textContent}","${aportacionValue}","${cells[3].textContent.replace('$','')}","${cells[4].textContent.replace('$','')}"\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
