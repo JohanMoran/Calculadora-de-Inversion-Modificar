@@ -292,7 +292,7 @@
   <label>Tasa Anual (%):</label>
   <div class="input-container">
     <input type="number" id="tasa" step="0.01" />
-    <span>¿Cuánto puedes destinar a tu inversión periódicamente para incrementar tus rendimientos</span>
+    <span>¿Cuál es la tasa de rendimiento anual que te está ofreciendo la institución financiera?</span>
   </div>
 
   <label>Plazo (en meses):</label>
