@@ -6,6 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
           * === SOLUCIÓN: Oculta el título automático de GitHub Pages === */
           .pagehead, .gh-header, .repohead, .Header { display: none !important; }
@@ -35,6 +36,7 @@
       max-width: 900px;
       margin: auto;
       transition: background-color 0.4s, color 0.4s;
+      position: relative;
     }
     #portada {
       background-color: var(--portada);
@@ -47,49 +49,11 @@
       align-items: center;
       justify-content: center;
       min-height: 150px;
-      position: relative;
     }
     #portada img {
       width: 100%;
       object-fit: cover;
       border-radius: 8px;
-    }
-    /* === Botones superiores === */
-    .top-buttons {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      display: flex;
-      gap: 10px;
-    }
-    .dark-mode-btn {
-      background-color: var(--primario);
-      color: var(--boton-texto);
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s;
-    }
-    .whatsapp-btn {
-      background-color: #25D366;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: background-color 0.3s;
-    }
-    .whatsapp-btn:hover {
-      background-color: #128C7E;
-    }
-    .whatsapp-btn svg {
-      fill: white;
     }
     label {
       margin-top: 15px;
@@ -199,6 +163,16 @@
       gap: 10px;
       margin-top: 15px;
     }
+    .dark-mode-btn {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      z-index: 999;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      background-color: var(--primario);
+      padding: 8px 12px;
+      border-radius: 20px;
+    }
     .leyenda {
       font-size: 14px;
       font-style: italic;
@@ -240,6 +214,33 @@
       border: 1px solid #555;
     }
 
+    /* === Nuevo botón de WhatsApp === */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      background-color: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #128C7E;
+      transform: scale(1.1);
+    }
+
+    .whatsapp-btn i {
+      font-size: 30px;
+    }
+
     /* Ajustes específicos para móvil */
     @media (max-width: 768px) {
       .input-container {
@@ -258,33 +259,28 @@
       #portada {
         min-height: 100px;
       }
-      .top-buttons {
-        flex-direction: column;
-        gap: 5px;
-        top: 10px;
-        right: 10px;
-      }
-      .dark-mode-btn, .whatsapp-btn {
+      .dark-mode-btn {
+        top: 15px;
+        right: 15px;
         padding: 6px 10px;
         font-size: 12px;
+      }
+      .whatsapp-btn {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
       }
     }
   </style>
 </head>
 <body>
+  <button class="dark-mode-btn" onclick="toggleDarkMode()">🌙 Modo Oscuro</button>
+
   <div id="portada">
     <img src="https://raw.githubusercontent.com/JohanMoran/Calculadora-de-Inversion/main/Johan_Moran.PNG" 
          alt="Calculadora de Inversión"
          style="width: 100%; max-width: 900px; height: auto; border-radius: 8px;">
-    <div class="top-buttons">
-      <button class="whatsapp-btn" onclick="abrirWhatsApp()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-6.29 3.617c-.545 0-1.06-.113-1.529-.339l-1.12.328.342-1.072c-.347-.535-.549-1.156-.549-1.825 0-1.91 1.593-3.463 3.554-3.463.943 0 1.829.368 2.497 1.037.668.668 1.037 1.556 1.037 2.497 0 1.96-1.553 3.553-3.462 3.553m6.29-13.998c-3.242 0-5.878 2.636-5.878 5.882 0 1.073.29 2.073.79 2.932L6.22 20.806l5.592-1.645c.86.493 1.86.785 2.96.785 3.242 0 5.88-2.636 5.88-5.88 0-3.245-2.638-5.882-5.88-5.882"/>
-        </svg>
-        WhatsApp
-      </button>
-      <button class="dark-mode-btn" onclick="toggleDarkMode()">🌙 Modo Oscuro</button>
-    </div>
   </div>
 
   <label>MONTO INICIAL:</label>
@@ -365,6 +361,11 @@
     </table>
   </div>
 
+  <!-- Botón flotante de WhatsApp -->
+  <a href="https://wa.me/523318853923" class="whatsapp-btn" target="_blank" title="Contactar por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
   <script>
     let datosGrafica = [];
     let totalAportaciones = 0, totalInteres = 0, capital = 0;
@@ -375,13 +376,6 @@
       if (chart) {
         chart.update();
       }
-    }
-
-    function abrirWhatsApp() {
-      const numero = "3318853923";
-      const mensaje = "Hola, me interesa saber más sobre inversiones...";
-      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, '_blank');
     }
 
     // Función para formatear con $ mientras se escribe
