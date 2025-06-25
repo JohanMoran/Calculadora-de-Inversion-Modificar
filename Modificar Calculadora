@@ -283,7 +283,7 @@
          style="width: 100%; max-width: 900px; height: auto; border-radius: 8px;">
   </div>
 
-  <label>MONTO INICIAL:</label>
+  <label>Monto Inicial:</label>
   <div class="input-container">
     <input type="text" id="capitalInicial" />
     <span>¿Con qué cantidad cuentas en este momento? ¿Con cuánto empezarás tu inversión?</span>
@@ -292,7 +292,7 @@
   <label>Tasa Anual (%):</label>
   <div class="input-container">
     <input type="number" id="tasa" step="0.01" />
-    <span>Tasa de Interés anual, inversionistas conservadores (renta fija) 10% - 15%.</span>
+    <span>¿Cuánto puedes destinar a tu inversión periódicamente para incrementar tus rendimientos</span>
   </div>
 
   <label>Plazo (en meses):</label>
