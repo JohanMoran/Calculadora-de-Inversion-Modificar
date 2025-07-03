@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -37,6 +36,49 @@
       transition: background-color 0.4s, color 0.4s;
     }
 
+    /* Nuevos estilos para el header con logo */
+    .header-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .logo-img {
+      max-height: 100px;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-img:hover {
+      transform: scale(1.05);
+    }
+
+    .title-container {
+      margin-top: 10px;
+    }
+
+    .title-container h1 {
+      margin-bottom: 5px;
+      color: var(--primario);
+    }
+
+    .title-container p {
+      color: var(--primario);
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-top: 0;
+      letter-spacing: 1px;
+    }
+
     .calculadora-grid {
       display: grid;
       grid-template-columns: 1fr 2fr;
@@ -47,6 +89,18 @@
     @media (max-width: 768px) {
       .calculadora-grid {
         grid-template-columns: 1fr;
+      }
+      
+      .logo-img {
+        max-height: 80px;
+      }
+      
+      .title-container h1 {
+        font-size: 1.5em;
+      }
+      
+      .title-container p {
+        font-size: 1em;
       }
     }
 
@@ -261,7 +315,17 @@
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()">🌙 Modo Oscuro</button>
 
-  <h1 style="color: var(--primario); text-align: center;">Calculadora de Interés Compuesto</h1>
+  <!-- Nuevo header con logo -->
+  <div class="header-container">
+    <div class="logo-container">
+      <img src="Johan_Moran.PNG" alt="Logo Johan Moran - Asesor Financiero" class="logo-img">
+    </div>
+    
+    <div class="title-container">
+      <h1>Calculadora de Interés Compuesto</h1>
+      <p>ASESOR FINANCIERO</p>
+    </div>
+  </div>
 
   <div class="calculadora-grid">
     <!-- Columna izquierda - Inputs -->
@@ -546,117 +610,117 @@
     }
 
     function generarGraficoBarras(datos, labels) {
-  const ctx = document.getElementById('graficaBarras').getContext('2d');
-  
-  if (chartBarras) {
-    chartBarras.destroy();
-  }
-  
-  // Preparar datos para el gráfico (modificado para mostrar depósito inicial en todos los periodos)
-  const datosInicial = datos.map(() => datos[0].capitalInicial);
-  
-  // Calcular valores acumulativos para aportaciones e intereses
-  let acumuladoAportaciones = 0;
-  let acumuladoIntereses = 0;
-  
-  const datosAportaciones = datos.map(item => {
-    acumuladoAportaciones += item.aportaciones;
-    return acumuladoAportaciones;
-  });
-  
-  const datosIntereses = datos.map(item => {
-    acumuladoIntereses += item.intereses;
-    return acumuladoIntereses;
-  });
-
-  chartBarras = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: 'Depósito inicial',
-          data: datosInicial,
-          backgroundColor: 'rgba(43, 103, 119, 0.7)',
-          stack: 'stack-1',
-          borderColor: '#2b6777',
-          borderWidth: 1
-        },
-        {
-          label: 'Aportaciones',
-          data: datosAportaciones,
-          backgroundColor: 'rgba(82, 171, 152, 0.7)',
-          stack: 'stack-1',
-          borderColor: '#52ab98',
-          borderWidth: 1
-        },
-        {
-          label: 'Intereses',
-          data: datosIntereses,
-          backgroundColor: 'rgba(200, 216, 228, 0.7)',
-          stack: 'stack-1',
-          borderColor: '#c8d8e4',
-          borderWidth: 1
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          stacked: true,
-          grid: {
-            display: false
-          }
-        },
-        y: {
-          stacked: true,
-          ticks: {
-            callback: (value) => formatCurrency(value)
-          },
-          grid: {
-            color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)'
-          },
-          beginAtZero: true
-        }
-      },
-      plugins: {
-        legend: {
-          position: 'top',
-          labels: {
-            boxWidth: 12,
-            padding: 20,
-            usePointStyle: true,
-            pointStyle: 'rect'
-          }
-        },
-        tooltip: {
-          callbacks: {
-            label: (context) => {
-              let label = context.dataset.label || '';
-              if (label) {
-                label += ': ';
-              }
-              if (context.parsed.y !== null) {
-                label += formatCurrency(context.parsed.y);
-              }
-              return label;
-            },
-            footer: (items) => {
-              const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
-              return `Total acumulado: ${formatCurrency(total)}`;
-            }
-          }
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
+      const ctx = document.getElementById('graficaBarras').getContext('2d');
+      
+      if (chartBarras) {
+        chartBarras.destroy();
       }
+      
+      // Preparar datos para el gráfico (modificado para mostrar depósito inicial en todos los periodos)
+      const datosInicial = datos.map(() => datos[0].capitalInicial);
+      
+      // Calcular valores acumulativos para aportaciones e intereses
+      let acumuladoAportaciones = 0;
+      let acumuladoIntereses = 0;
+      
+      const datosAportaciones = datos.map(item => {
+        acumuladoAportaciones += item.aportaciones;
+        return acumuladoAportaciones;
+      });
+      
+      const datosIntereses = datos.map(item => {
+        acumuladoIntereses += item.intereses;
+        return acumuladoIntereses;
+      });
+
+      chartBarras = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Depósito inicial',
+              data: datosInicial,
+              backgroundColor: 'rgba(43, 103, 119, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#2b6777',
+              borderWidth: 1
+            },
+            {
+              label: 'Aportaciones',
+              data: datosAportaciones,
+              backgroundColor: 'rgba(82, 171, 152, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#52ab98',
+              borderWidth: 1
+            },
+            {
+              label: 'Intereses',
+              data: datosIntereses,
+              backgroundColor: 'rgba(200, 216, 228, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#c8d8e4',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: true,
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              stacked: true,
+              ticks: {
+                callback: (value) => formatCurrency(value)
+              },
+              grid: {
+                color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)'
+              },
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                boxWidth: 12,
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'rect'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatCurrency(context.parsed.y);
+                  }
+                  return label;
+                },
+                footer: (items) => {
+                  const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+                  return `Total acumulado: ${formatCurrency(total)}`;
+                }
+              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          }
+        }
+      });
     }
-  });
-}
 
     function generarTabla(datos, esMensual) {
       const tbody = document.querySelector('#tablaResultados tbody');
