@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -544,114 +545,107 @@
       generarTabla(resultados, tipoPlazo === 'mensual');
     }
 
-   function generarGraficoBarras(datos, esMensual) {
-  const ctx = document.getElementById('graficaBarras').getContext('2d');
-  
-  if (chartBarras) {
-    chartBarras.destroy();
-  }
-
-  // 1. Configurar etiquetas según el tipo de plazo
-  const labels = datos.map(item => esMensual ? `Mes ${item.periodo}` : `Año ${item.periodo}`);
-  
-  // 2. Preparar datos (orden inverso para apilamiento correcto)
-  const datosInicial = datos.map(() => datos[0].capitalInicial);
-  
-  let aportacionesAcumuladas = 0;
-  let interesesAcumulados = 0;
-  
-  const datosAportaciones = datos.map(item => {
-    aportacionesAcumuladas += item.aportaciones;
-    return aportacionesAcumuladas;
-  });
-  
-  const datosIntereses = datos.map(item => {
-    interesesAcumulados += item.intereses;
-    return interesesAcumulados;
-  });
-
-  // 3. Configurar el gráfico con orden de apilamiento
-  chartBarras = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        // DEPÓSITO INICIAL (fondo)
-        {
-          label: 'Depósito inicial',
-          data: datosInicial,
-          backgroundColor: 'rgba(43, 103, 119, 0.7)',
-          borderColor: '#2b6777',
-          borderWidth: 1,
-          stack: 'stack-1',
-          order: 3 // Orden Z (abajo)
-        },
-        // APORTACIONES (medio)
-        {
-          label: 'Aportaciones acumuladas',
-          data: datosAportaciones,
-          backgroundColor: 'rgba(82, 171, 152, 0.7)',
-          borderColor: '#52ab98',
-          borderWidth: 1,
-          stack: 'stack-1',
-          order: 2 // Orden intermedio
-        },
-        // INTERESES (arriba)
-        {
-          label: 'Interés acumulado',
-          data: datosIntereses,
-          backgroundColor: 'rgba(200, 216, 228, 0.7)',
-          borderColor: '#c8d8e4',
-          borderWidth: 1,
-          stack: 'stack-1',
-          order: 1 // Orden superior
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          stacked: true,
-          grid: { display: false },
-          title: {
-            display: true,
-            text: esMensual ? 'Meses de inversión' : 'Años de inversión'
-          }
-        },
-        y: {
-          stacked: true,
-          ticks: { callback: (value) => formatCurrency(value) },
-          title: {
-            display: true,
-            text: 'Monto acumulado'
-          },
-          beginAtZero: true
-        }
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: (context) => {
-              const label = context.dataset.label || '';
-              const value = context.parsed.y;
-              const prevValue = context.datasetIndex > 0 
-                ? context.chart.data.datasets[context.datasetIndex-1].data[context.dataIndex] 
-                : 0;
-              const diff = value - prevValue;
-              
-              return [
-                `${label}: ${formatCurrency(value)}`,
-                `Incremento: ${formatCurrency(diff)}`
-              ];
-            }
-          }
-        }
+    function generarGraficoBarras(datos, labels) {
+      const ctx = document.getElementById('graficaBarras').getContext('2d');
+      
+      if (chartBarras) {
+        chartBarras.destroy();
       }
+      
+      // Preparar datos para el gráfico
+      const datosInicial = datos.map((item, index) => index === 0 ? item.capitalInicial : 0);
+      const datosAportaciones = datos.map(item => item.aportaciones);
+      const datosIntereses = datos.map(item => item.intereses);
+
+      chartBarras = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Depósito inicial',
+              data: datosInicial,
+              backgroundColor: 'rgba(43, 103, 119, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#2b6777',
+              borderWidth: 1
+            },
+            {
+              label: 'Aportaciones',
+              data: datosAportaciones,
+              backgroundColor: 'rgba(82, 171, 152, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#52ab98',
+              borderWidth: 1
+            },
+            {
+              label: 'Intereses',
+              data: datosIntereses,
+              backgroundColor: 'rgba(200, 216, 228, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#c8d8e4',
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              stacked: true,
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              stacked: true,
+              ticks: {
+                callback: (value) => formatCurrency(value)
+              },
+              grid: {
+                color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)'
+              },
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                boxWidth: 12,
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'rect'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatCurrency(context.parsed.y);
+                  }
+                  return label;
+                },
+                footer: (items) => {
+                  const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+                  return `Total acumulado: ${formatCurrency(total)}`;
+                }
+              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
+          }
+        }
+      });
     }
-  });
-}
+
     function generarTabla(datos, esMensual) {
       const tbody = document.querySelector('#tablaResultados tbody');
       tbody.innerHTML = '';
