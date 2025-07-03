@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -201,11 +200,11 @@
         <h3>Depósito inicial</h3>
         <div class="input-group">
           <label for="capitalInicial">Monto:</label>
-          <input type="text" id="capitalInicial" placeholder="$0,000">
+          <input type="text" id="capitalInicial" placeholder="$0">
         </div>
         <div class="input-group">
           <label for="tasa">Tasa de interés anual (%):</label>
-          <input type="number" id="tasa" step="0.01" placeholder="14">
+          <input type="number" id="tasa" step="0.01" placeholder="0">
         </div>
       </div>
 
@@ -213,7 +212,7 @@
         <h3>Años a invertir</h3>
         <div class="input-group">
           <label for="plazoAnios">Cantidad de años:</label>
-          <input type="number" id="plazoAnios" min="1" placeholder="5">
+          <input type="number" id="plazoAnios" min="1" placeholder="0">
         </div>
         <div class="input-group">
           <label for="frecuencia">Frecuencia de capitalización:</label>
@@ -230,7 +229,7 @@
         <h3>Aportaciones adicionales</h3>
         <div class="input-group">
           <label for="aportacion">Monto:</label>
-          <input type="text" id="aportacion" placeholder="$0,000">
+          <input type="text" id="aportacion" placeholder="$0">
         </div>
         <div class="input-group">
           <label for="frecuenciaAportacion">Frecuencia de aportación:</label>
@@ -411,7 +410,11 @@
       }
 
       const labels = datos.map(item => `Año ${item.anio}`);
-      const datosInicial = datos.map(item => item.capitalInicial);
+      
+      // Mostrar el capital inicial completo en todos los años
+      const datosInicial = datos.map(() => datos[0].capitalInicial);
+      
+      // Ajustamos las aportaciones para que no se solapen con el capital inicial
       const datosAportaciones = datos.map(item => item.aportaciones);
       const datosIntereses = datos.map(item => item.intereses);
 
@@ -423,20 +426,26 @@
             {
               label: 'Depósito inicial',
               data: datosInicial,
-              backgroundColor: '#2b6777',
-              stack: 'stack-1'
+              backgroundColor: 'rgba(43, 103, 119, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#2b6777',
+              borderWidth: 1
             },
             {
               label: 'Aportaciones',
               data: datosAportaciones,
-              backgroundColor: '#52ab98',
-              stack: 'stack-1'
+              backgroundColor: 'rgba(82, 171, 152, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#52ab98',
+              borderWidth: 1
             },
             {
               label: 'Intereses',
               data: datosIntereses,
-              backgroundColor: '#c8d8e4',
-              stack: 'stack-1'
+              backgroundColor: 'rgba(200, 216, 228, 0.7)',
+              stack: 'stack-1',
+              borderColor: '#c8d8e4',
+              borderWidth: 1
             }
           ]
         },
@@ -457,7 +466,8 @@
               },
               grid: {
                 color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)'
-              }
+              },
+              beginAtZero: true
             }
           },
           plugins: {
@@ -465,20 +475,33 @@
               position: 'top',
               labels: {
                 boxWidth: 12,
-                padding: 20
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'rect'
               }
             },
             tooltip: {
               callbacks: {
                 label: (context) => {
-                  return ` ${context.dataset.label}: ${formatCurrency(context.raw)}`;
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatCurrency(context.parsed.y);
+                  }
+                  return label;
                 },
                 footer: (items) => {
-                  const total = items.reduce((sum, item) => sum + item.raw, 0);
-                  return `Total: ${formatCurrency(total)}`;
+                  const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+                  return `Total acumulado: ${formatCurrency(total)}`;
                 }
               }
             }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
           }
         }
       });
