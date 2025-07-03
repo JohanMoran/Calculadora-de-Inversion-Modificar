@@ -36,23 +36,16 @@
       transition: background-color 0.4s, color 0.4s;
     }
 
-    /* Nuevos estilos para el header con logo */
-    .header-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
+    /* Estilos para el logo */
     .logo-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 10px;
+      margin: 30px 0;
+      text-align: center;
     }
 
     .logo-img {
-      max-height: 100px;
+      max-height: 180px;
       width: auto;
       object-fit: contain;
       transition: transform 0.3s ease;
@@ -62,45 +55,22 @@
       transform: scale(1.05);
     }
 
-    .title-container {
-      margin-top: 10px;
-    }
-
-    .title-container h1 {
-      margin-bottom: 5px;
-      color: var(--primario);
-    }
-
-    .title-container p {
-      color: var(--primario);
-      font-size: 1.2em;
-      font-weight: 600;
-      margin-top: 0;
-      letter-spacing: 1px;
+    @media (max-width: 768px) {
+      .logo-img {
+        max-height: 140px;
+      }
     }
 
     .calculadora-grid {
       display: grid;
       grid-template-columns: 1fr 2fr;
       gap: 20px;
-      margin-top: 30px;
+      margin-top: 10px;
     }
 
     @media (max-width: 768px) {
       .calculadora-grid {
         grid-template-columns: 1fr;
-      }
-      
-      .logo-img {
-        max-height: 80px;
-      }
-      
-      .title-container h1 {
-        font-size: 1.5em;
-      }
-      
-      .title-container p {
-        font-size: 1em;
       }
     }
 
@@ -315,16 +285,9 @@
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()">🌙 Modo Oscuro</button>
 
-  <!-- Nuevo header con logo -->
-  <div class="header-container">
-    <div class="logo-container">
-      <img src="Johan_Moran.PNG" alt="Logo Johan Moran - Asesor Financiero" class="logo-img">
-    </div>
-    
-    <div class="title-container">
-      <h1>Calculadora de Interés Compuesto</h1>
-      <p>ASESOR FINANCIERO</p>
-    </div>
+  <!-- Logo centrado y más grande -->
+  <div class="logo-container">
+    <img src="Johan_Moran.PNG" alt="Logo" class="logo-img">
   </div>
 
   <div class="calculadora-grid">
