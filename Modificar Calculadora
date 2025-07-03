@@ -544,7 +544,7 @@
       generarTabla(resultados, tipoPlazo === 'mensual');
     }
 
-    ffunction generarGraficoBarras(datos, esMensual) {
+    function generarGraficoBarras(datos, esMensual) {
   const ctx = document.getElementById('graficaBarras').getContext('2d');
   
   if (chartBarras) {
@@ -560,13 +560,20 @@
   // Aportaciones acumuladas
   const datosAportaciones = [];
   let aportacionesAcumuladas = 0;
-  datos.forEach(item => {
-    aportacionesAcumuladas += item.aportaciones;
-    datosAportaciones.push(aportacionesAcumuladas);
-  });
   
-  // Intereses NO acumulados (solo lo generado en ese periodo)
-  const datosIntereses = datos.map(item => item.intereses);
+  // Intereses acumulados
+  const datosIntereses = [];
+  let interesesAcumulados = 0;
+
+  datos.forEach(item => {
+    // Para modo ANUAL: mostramos aportaciones e intereses del año completo
+    // Para modo MENSUAL: mostramos acumulado mes a mes
+    aportacionesAcumuladas += item.aportaciones;
+    interesesAcumulados += item.intereses;
+    
+    datosAportaciones.push(aportacionesAcumuladas);
+    datosIntereses.push(interesesAcumulados);
+  });
 
   chartBarras = new Chart(ctx, {
     type: 'bar',
@@ -579,7 +586,9 @@
           backgroundColor: 'rgba(43, 103, 119, 0.7)',
           stack: 'stack-1',
           borderColor: '#2b6777',
-          borderWidth: 1
+          borderWidth: 1,
+          // Esto hace que el depósito inicial aparezca detrás
+          order: 3
         },
         {
           label: 'Aportaciones acumuladas',
@@ -587,15 +596,17 @@
           backgroundColor: 'rgba(82, 171, 152, 0.7)',
           stack: 'stack-1',
           borderColor: '#52ab98',
-          borderWidth: 1
+          borderWidth: 1,
+          order: 2
         },
         {
-          label: 'Interés del periodo',
+          label: 'Interés acumulado',
           data: datosIntereses,
           backgroundColor: 'rgba(200, 216, 228, 0.7)',
           stack: 'stack-1',
           borderColor: '#c8d8e4',
-          borderWidth: 1
+          borderWidth: 1,
+          order: 1
         }
       ]
     },
@@ -656,7 +667,6 @@
     }
   });
 }
-
     function generarTabla(datos, esMensual) {
       const tbody = document.querySelector('#tablaResultados tbody');
       tbody.innerHTML = '';
