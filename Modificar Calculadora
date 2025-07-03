@@ -209,21 +209,19 @@
       </div>
 
       <div class="input-card">
-        <h3>Plazo para invertir</h3>
+        <h3>Años a invertir</h3>
         <div class="input-group">
-          <label for="tipoPlazo">Tipo de plazo:</label>
-          <select id="tipoPlazo" onchange="cambiarTipoPlazo()">
-            <option value="anual">Periodo Anual</option>
-            <option value="mensual">Periodo Mensual</option>
-          </select>
-        </div>
-        <div class="input-group" id="grupo-anios">
           <label for="plazoAnios">Cantidad de años:</label>
           <input type="number" id="plazoAnios" min="1" placeholder="0">
         </div>
-        <div class="input-group" id="grupo-meses" style="display: none;">
-          <label for="plazoMeses">Cantidad de meses:</label>
-          <input type="number" id="plazoMeses" min="1" placeholder="0">
+        <div class="input-group">
+          <label for="frecuencia">Frecuencia de capitalización:</label>
+          <select id="frecuencia">
+            <option value="12" selected>Mensualmente</option>
+            <option value="4">Trimestral</option>
+            <option value="2">Semestral</option>
+            <option value="1">Anualmente</option>
+          </select>
         </div>
       </div>
 
@@ -312,22 +310,6 @@
       }
     }
 
-    function cambiarTipoPlazo() {
-      const tipoPlazo = document.getElementById('tipoPlazo').value;
-      document.getElementById('grupo-anios').style.display = tipoPlazo === 'anual' ? 'block' : 'none';
-      document.getElementById('grupo-meses').style.display = tipoPlazo === 'mensual' ? 'block' : 'none';
-      calcular();
-    }
-
-    function obtenerPlazoTotalEnMeses() {
-      const tipoPlazo = document.getElementById('tipoPlazo').value;
-      if (tipoPlazo === 'anual') {
-        return (parseInt(document.getElementById('plazoAnios').value) || 0) * 12;
-      } else {
-        return parseInt(document.getElementById('plazoMeses').value) || 0;
-      }
-    }
-
     function formatearMoneda(input) {
       // Guardar posición del cursor
       const cursorPosition = input.selectionStart;
@@ -360,13 +342,13 @@
       // Obtener valores de los inputs
       const capitalInicial = parseFloat(document.getElementById('capitalInicial').value.replace(/[^0-9.]/g, '')) || 0;
       const tasaAnual = parseFloat(document.getElementById('tasa').value) || 0;
-      const plazoMesesTotal = obtenerPlazoTotalEnMeses();
+      const plazoAnios = parseInt(document.getElementById('plazoAnios').value) || 0;
       const frecuencia = parseInt(document.getElementById('frecuencia').value) || 12;
       const aportacion = parseFloat(document.getElementById('aportacion').value.replace(/[^0-9.]/g, '')) || 0;
       const frecuenciaAportacion = parseInt(document.getElementById('frecuenciaAportacion').value) || 12;
 
       // Validaciones básicas
-      if (plazoMesesTotal <= 0 || tasaAnual <= 0) {
+      if (plazoAnios <= 0 || tasaAnual <= 0) {
         return;
       }
 
@@ -381,7 +363,7 @@
       const periodosPorAnio = frecuencia;
       const aportacionesPorAnio = 12 / frecuenciaAportacion;
 
-      for (let anio = 1; anio <= plazoMesesTotal / 12; anio++) {
+      for (let anio = 1; anio <= plazoAnios; anio++) {
         let interesAnual = 0;
         let aportacionesAnuales = 0;
 
