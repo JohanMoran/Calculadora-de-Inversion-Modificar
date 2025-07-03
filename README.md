@@ -172,6 +172,39 @@
       font-size: 30px;
     }
 
+    /* Estilos para los nuevos elementos */
+    .input-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 1em;
+    }
+
+    body.dark .input-group select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+
+    button {
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    #resultadoMeta {
+      background-color: rgba(200, 216, 228, 0.2);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid var(--secundario);
+    }
+
+    body.dark #resultadoMeta {
+      background-color: rgba(200, 216, 228, 0.1);
+    }
+
     @media (max-width: 768px) {
       .dark-mode-btn {
         top: 15px;
@@ -209,19 +242,21 @@
       </div>
 
       <div class="input-card">
-        <h3>Años a invertir</h3>
+        <h3>Plazo para invertir</h3>
         <div class="input-group">
+          <label for="tipoPlazo">Tipo de plazo:</label>
+          <select id="tipoPlazo" onchange="cambiarTipoPlazo()">
+            <option value="anual">Periodo Anual</option>
+            <option value="mensual">Periodo Mensual</option>
+          </select>
+        </div>
+        <div class="input-group" id="grupo-anios">
           <label for="plazoAnios">Cantidad de años:</label>
           <input type="number" id="plazoAnios" min="1" placeholder="0">
         </div>
-        <div class="input-group">
-          <label for="frecuencia">Frecuencia de capitalización:</label>
-          <select id="frecuencia">
-            <option value="12" selected>Mensualmente</option>
-            <option value="4">Trimestral</option>
-            <option value="2">Semestral</option>
-            <option value="1">Anualmente</option>
-          </select>
+        <div class="input-group" id="grupo-meses" style="display: none;">
+          <label for="plazoMeses">Cantidad de meses:</label>
+          <input type="number" id="plazoMeses" min="1" placeholder="0">
         </div>
       </div>
 
@@ -271,6 +306,46 @@
     </div>
   </div>
 
+  <!-- Calculadora de metas -->
+  <div class="input-card" style="margin-top: 30px;">
+    <h3>Calculadora de metas</h3>
+    <div class="input-group">
+      <label for="metaObjetivo">Monto objetivo:</label>
+      <input type="text" id="metaObjetivo" placeholder="$0" oninput="formatearMoneda(this)">
+    </div>
+    <div class="input-group">
+      <label for="tasaMeta">Tasa de interés anual (%):</label>
+      <input type="number" id="tasaMeta" step="0.01" placeholder="0">
+    </div>
+    <div class="input-group">
+      <label for="plazoMeta">Plazo para la meta:</label>
+      <select id="plazoMeta">
+        <option value="anual">Años</option>
+        <option value="mensual">Meses</option>
+      </select>
+      <input type="number" id="valorPlazoMeta" min="1" placeholder="0" style="margin-top: 8px;">
+    </div>
+    <button onclick="calcularMeta()" style="background-color: var(--secundario); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;">
+      Calcular meta
+    </button>
+    
+    <!-- Resultados de la meta -->
+    <div id="resultadoMeta" style="margin-top: 20px; display: none;">
+      <div class="result-row">
+        <span>Aportación mensual necesaria:</span>
+        <span id="aportacionMensualNecesaria" style="color: var(--verde); font-weight: bold;">$0.00</span>
+      </div>
+      <div class="result-row">
+        <span>Aportación total:</span>
+        <span id="aportacionTotalMeta">$0.00</span>
+      </div>
+      <div class="result-row">
+        <span>Interés generado:</span>
+        <span id="interesGeneradoMeta">$0.00</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Botón flotante de WhatsApp -->
   <a href="https://wa.me/523318853923?text=Hola,%20me%20interesa%20saber%20más%20sobre%20inversiones%20💰📈" class="whatsapp-btn" target="_blank" title="Contactar por WhatsApp">
     <i class="fab fa-whatsapp"></i>
@@ -299,6 +374,10 @@
         formatearMoneda(this);
       });
 
+      document.getElementById('metaObjetivo').addEventListener('input', function() {
+        formatearMoneda(this);
+      });
+
       // Calcular inicialmente
       calcular();
     });
@@ -307,6 +386,22 @@
       document.body.classList.toggle("dark");
       if (chartBarras) {
         chartBarras.update();
+      }
+    }
+
+    function cambiarTipoPlazo() {
+      const tipoPlazo = document.getElementById('tipoPlazo').value;
+      document.getElementById('grupo-anios').style.display = tipoPlazo === 'anual' ? 'block' : 'none';
+      document.getElementById('grupo-meses').style.display = tipoPlazo === 'mensual' ? 'block' : 'none';
+      calcular();
+    }
+
+    function obtenerPlazoTotalEnMeses() {
+      const tipoPlazo = document.getElementById('tipoPlazo').value;
+      if (tipoPlazo === 'anual') {
+        return (parseInt(document.getElementById('plazoAnios').value) || 0) * 12;
+      } else {
+        return parseInt(document.getElementById('plazoMeses').value) || 0;
       }
     }
 
@@ -342,54 +437,67 @@
       // Obtener valores de los inputs
       const capitalInicial = parseFloat(document.getElementById('capitalInicial').value.replace(/[^0-9.]/g, '')) || 0;
       const tasaAnual = parseFloat(document.getElementById('tasa').value) || 0;
-      const plazoAnios = parseInt(document.getElementById('plazoAnios').value) || 0;
       const frecuencia = parseInt(document.getElementById('frecuencia').value) || 12;
       const aportacion = parseFloat(document.getElementById('aportacion').value.replace(/[^0-9.]/g, '')) || 0;
       const frecuenciaAportacion = parseInt(document.getElementById('frecuenciaAportacion').value) || 12;
+      
+      // Obtener plazo total en meses
+      const plazoMesesTotal = obtenerPlazoTotalEnMeses();
+      const plazoAniosTotal = plazoMesesTotal / 12;
 
       // Validaciones básicas
-      if (plazoAnios <= 0 || tasaAnual <= 0) {
+      if (plazoMesesTotal <= 0 || tasaAnual <= 0) {
         return;
       }
 
-      // Calcular valores por año
-      const resultadosPorAnio = [];
+      // Calcular valores por periodo
+      const resultadosPorPeriodo = [];
       capital = capitalInicial;
       totalAportaciones = 0;
       totalInteres = 0;
 
       const tasaPeriodica = tasaAnual / 100 / frecuencia;
       const aportacionPeriodica = aportacion;
-      const periodosPorAnio = frecuencia;
-      const aportacionesPorAnio = 12 / frecuenciaAportacion;
+      const periodosTotales = plazoMesesTotal / (12 / frecuencia);
+      const aportacionesTotales = plazoMesesTotal / (12 / frecuenciaAportacion);
 
-      for (let anio = 1; anio <= plazoAnios; anio++) {
-        let interesAnual = 0;
-        let aportacionesAnuales = 0;
+      let mesActual = 0;
+      let anioActual = 1;
+      let periodoActual = 1;
 
-        for (let periodo = 1; periodo <= periodosPorAnio; periodo++) {
-          // Calcular interés del periodo
-          const interesPeriodo = capital * tasaPeriodica;
-          interesAnual += interesPeriodo;
-          capital += interesPeriodo;
+      while (mesActual < plazoMesesTotal) {
+        // Calcular interés del periodo
+        const interesPeriodo = capital * tasaPeriodica;
+        totalInteres += interesPeriodo;
+        capital += interesPeriodo;
 
-          // Calcular aportaciones
-          if (periodo % (periodosPorAnio / aportacionesPorAnio) === 0) {
-            capital += aportacionPeriodica;
-            aportacionesAnuales += aportacionPeriodica;
-          }
+        // Calcular aportaciones (solo en los periodos correspondientes)
+        if (periodoActual % (frecuencia / frecuenciaAportacion) === 0) {
+          capital += aportacionPeriodica;
+          totalAportaciones += aportacionPeriodica;
         }
 
-        totalAportaciones += aportacionesAnuales;
-        totalInteres += interesAnual;
+        // Determinar si es fin de año para registrar en resultados
+        const esFinDeAnio = (mesActual + 1) % 12 === 0 || (mesActual + 1) === plazoMesesTotal;
+        const esPeriodoVisualizacion = document.getElementById('tipoPlazo').value === 'anual' ? esFinDeAnio : true;
 
-        resultadosPorAnio.push({
-          anio,
-          capitalInicial: anio === 1 ? capitalInicial : 0,
-          aportaciones: aportacionesAnuales,
-          intereses: interesAnual,
-          total: capital
-        });
+        if (esPeriodoVisualizacion) {
+          const periodoLabel = document.getElementById('tipoPlazo').value === 'anual' ? 
+                              `Año ${anioActual}` : 
+                              `Mes ${mesActual + 1}`;
+
+          resultadosPorPeriodo.push({
+            periodo: periodoLabel,
+            aportaciones: aportacionPeriodica * (periodoActual / (frecuencia / frecuenciaAportacion)),
+            intereses: interesPeriodo,
+            total: capital
+          });
+
+          if (esFinDeAnio) anioActual++;
+        }
+
+        mesActual++;
+        periodoActual++;
       }
 
       // Actualizar resumen
@@ -398,8 +506,58 @@
       document.getElementById('res-intereses').textContent = formatCurrency(totalInteres);
       document.getElementById('res-total').textContent = formatCurrency(capital);
 
-      // Generar gráfico de barras apiladas
-      generarGraficoBarras(resultadosPorAnio);
+      // Generar gráfico
+      generarGraficoBarras(resultadosPorPeriodo);
+    }
+
+    function calcularMeta() {
+      // Obtener valores de los inputs
+      const metaObjetivo = parseFloat(document.getElementById('metaObjetivo').value.replace(/[^0-9.]/g, '')) || 0;
+      const tasaAnual = parseFloat(document.getElementById('tasaMeta').value) || 0;
+      const tipoPlazo = document.getElementById('plazoMeta').value;
+      const valorPlazo = parseInt(document.getElementById('valorPlazoMeta').value) || 0;
+      
+      // Validaciones básicas
+      if (metaObjetivo <= 0 || tasaAnual <= 0 || valorPlazo <= 0) {
+        alert("Por favor complete todos los campos con valores válidos");
+        return;
+      }
+      
+      // Convertir plazo a meses
+      const plazoMeses = tipoPlazo === 'anual' ? valorPlazo * 12 : valorPlazo;
+      const tasaMensual = tasaAnual / 100 / 12;
+      
+      // Calcular aportación mensual necesaria
+      const aportacionMensual = (metaObjetivo * tasaMensual) / 
+                               (Math.pow(1 + tasaMensual, plazoMeses) - 1);
+      
+      // Calcular valores totales
+      const aportacionTotal = aportacionMensual * plazoMeses;
+      const interesGenerado = metaObjetivo - aportacionTotal;
+      
+      // Mostrar resultados
+      document.getElementById('aportacionMensualNecesaria').textContent = formatCurrency(aportacionMensual);
+      document.getElementById('aportacionTotalMeta').textContent = formatCurrency(aportacionTotal);
+      document.getElementById('interesGeneradoMeta').textContent = formatCurrency(interesGenerado);
+      document.getElementById('resultadoMeta').style.display = 'block';
+      
+      // Actualizar la calculadora principal con estos valores
+      document.getElementById('aportacion').value = formatCurrency(aportacionMensual);
+      document.getElementById('frecuenciaAportacion').value = '12'; // Mensual
+      document.getElementById('tasa').value = tasaAnual;
+      
+      if (tipoPlazo === 'anual') {
+        document.getElementById('tipoPlazo').value = 'anual';
+        document.getElementById('plazoAnios').value = valorPlazo;
+        cambiarTipoPlazo();
+      } else {
+        document.getElementById('tipoPlazo').value = 'mensual';
+        document.getElementById('plazoMeses').value = valorPlazo;
+        cambiarTipoPlazo();
+      }
+      
+      // Calcular para ver el resultado en la gráfica principal
+      calcular();
     }
 
     function generarGraficoBarras(datos) {
@@ -409,12 +567,7 @@
         chartBarras.destroy();
       }
 
-      const labels = datos.map(item => `Año ${item.anio}`);
-      
-      // Mostrar el capital inicial completo en todos los años
-      const datosInicial = datos.map(() => datos[0].capitalInicial);
-      
-      // Ajustamos las aportaciones para que no se solapen con el capital inicial
+      const labels = datos.map(item => item.periodo);
       const datosAportaciones = datos.map(item => item.aportaciones);
       const datosIntereses = datos.map(item => item.intereses);
 
@@ -423,14 +576,6 @@
         data: {
           labels: labels,
           datasets: [
-            {
-              label: 'Depósito inicial',
-              data: datosInicial,
-              backgroundColor: 'rgba(43, 103, 119, 0.7)',
-              stack: 'stack-1',
-              borderColor: '#2b6777',
-              borderWidth: 1
-            },
             {
               label: 'Aportaciones',
               data: datosAportaciones,
