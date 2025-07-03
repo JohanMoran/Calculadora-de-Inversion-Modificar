@@ -38,7 +38,7 @@
 
     .calculadora-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.5fr; /* Más espacio para la columna derecha */
       gap: 20px;
       margin-top: 30px;
     }
@@ -52,8 +52,8 @@
     .input-card, .result-card {
       background: white;
       border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 15px; /* Reducido el padding */
+      margin-bottom: 15px; /* Reducido el margen */
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
@@ -66,9 +66,10 @@
 
     .input-card h3, .result-card h3 {
       margin-top: 0;
+      font-size: 1.1rem; /* Tamaño de fuente más pequeño */
       color: var(--primario);
       border-bottom: 1px solid #eee;
-      padding-bottom: 10px;
+      padding-bottom: 8px; /* Reducido el padding */
     }
 
     body.dark .input-card h3,
@@ -77,22 +78,24 @@
     }
 
     .input-group {
-      margin-bottom: 15px;
+      margin-bottom: 12px; /* Reducido el margen */
     }
 
     .input-group label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 4px; /* Reducido el margen */
       font-weight: 600;
+      font-size: 0.9rem; /* Tamaño de fuente más pequeño */
     }
 
     input, select {
       width: 100%;
-      padding: 10px;
+      padding: 8px 10px; /* Reducido el padding vertical */
       border: 1px solid #ddd;
       border-radius: 5px;
       background-color: #fff;
       transition: all 0.3s;
+      font-size: 0.9rem; /* Tamaño de fuente más pequeño */
     }
 
     body.dark input,
@@ -105,13 +108,14 @@
     .result-row {
       display: flex;
       justify-content: space-between;
-      margin: 10px 0;
+      margin: 8px 0; /* Reducido el margen */
+      font-size: 0.95rem;
     }
 
     .result-row.total {
       font-weight: bold;
       border-top: 1px solid #eee;
-      padding-top: 10px;
+      padding-top: 8px; /* Reducido el padding */
       color: var(--primario);
     }
 
@@ -121,10 +125,10 @@
 
     .chart-container {
       background: white;
-      padding: 20px;
+      padding: 15px; /* Reducido el padding */
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      height: 400px;
+      height: 350px; /* Altura ajustada */
     }
 
     canvas {
@@ -132,6 +136,48 @@
       height: 100% !important;
     }
 
+    /* Estilos para la tabla de resultados */
+    .tabla-resultados {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .tabla-resultados table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .tabla-resultados th {
+      background-color: var(--secundario);
+      color: white;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .tabla-resultados td {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tabla-resultados tr:nth-child(even) {
+      background-color: rgba(200, 216, 228, 0.2);
+    }
+
+    body.dark .tabla-resultados tr:nth-child(even) {
+      background-color: rgba(200, 216, 228, 0.1);
+    }
+
+    .tabla-resultados .total-row {
+      font-weight: bold;
+      background-color: rgba(43, 103, 119, 0.1) !important;
+    }
+
+    body.dark .tabla-resultados .total-row {
+      background-color: rgba(43, 103, 119, 0.2) !important;
+    }
+
+    /* Resto de estilos... */
     .dark-mode-btn {
       position: fixed;
       top: 20px;
@@ -227,7 +273,7 @@
   <h1 style="color: var(--primario); text-align: center;">Calculadora de Interés Compuesto</h1>
 
   <div class="calculadora-grid">
-    <!-- Columna izquierda - Inputs -->
+    <!-- Columna izquierda - Inputs (más compacta) -->
     <div class="input-section">
       <div class="input-card">
         <h3>Depósito inicial</h3>
@@ -276,9 +322,49 @@
           </select>
         </div>
       </div>
+
+      <!-- Calculadora de metas -->
+      <div class="input-card">
+        <h3>Calculadora de metas</h3>
+        <div class="input-group">
+          <label for="metaObjetivo">Monto objetivo:</label>
+          <input type="text" id="metaObjetivo" placeholder="$0" oninput="formatearMoneda(this)">
+        </div>
+        <div class="input-group">
+          <label for="tasaMeta">Tasa de interés anual (%):</label>
+          <input type="number" id="tasaMeta" step="0.01" placeholder="0">
+        </div>
+        <div class="input-group">
+          <label for="plazoMeta">Plazo para la meta:</label>
+          <select id="plazoMeta">
+            <option value="anual">Años</option>
+            <option value="mensual">Meses</option>
+          </select>
+          <input type="number" id="valorPlazoMeta" min="1" placeholder="0" style="margin-top: 8px;">
+        </div>
+        <button onclick="calcularMeta()" style="background-color: var(--secundario); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;">
+          Calcular meta
+        </button>
+        
+        <!-- Resultados de la meta -->
+        <div id="resultadoMeta" style="margin-top: 20px; display: none;">
+          <div class="result-row">
+            <span>Aportación mensual necesaria:</span>
+            <span id="aportacionMensualNecesaria" style="color: var(--verde); font-weight: bold;">$0.00</span>
+          </div>
+          <div class="result-row">
+            <span>Aportación total:</span>
+            <span id="aportacionTotalMeta">$0.00</span>
+          </div>
+          <div class="result-row">
+            <span>Interés generado:</span>
+            <span id="interesGeneradoMeta">$0.00</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Columna derecha - Resultados -->
+    <!-- Columna derecha - Resultados y gráfico (más grande) -->
     <div class="results-section">
       <div class="result-card">
         <h3>Resumen de inversión</h3>
@@ -303,45 +389,26 @@
       <div class="chart-container">
         <canvas id="graficaBarras"></canvas>
       </div>
-    </div>
-  </div>
 
-  <!-- Calculadora de metas -->
-  <div class="input-card" style="margin-top: 30px;">
-    <h3>Calculadora de metas</h3>
-    <div class="input-group">
-      <label for="metaObjetivo">Monto objetivo:</label>
-      <input type="text" id="metaObjetivo" placeholder="$0" oninput="formatearMoneda(this)">
-    </div>
-    <div class="input-group">
-      <label for="tasaMeta">Tasa de interés anual (%):</label>
-      <input type="number" id="tasaMeta" step="0.01" placeholder="0">
-    </div>
-    <div class="input-group">
-      <label for="plazoMeta">Plazo para la meta:</label>
-      <select id="plazoMeta">
-        <option value="anual">Años</option>
-        <option value="mensual">Meses</option>
-      </select>
-      <input type="number" id="valorPlazoMeta" min="1" placeholder="0" style="margin-top: 8px;">
-    </div>
-    <button onclick="calcularMeta()" style="background-color: var(--secundario); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px;">
-      Calcular meta
-    </button>
-    
-    <!-- Resultados de la meta -->
-    <div id="resultadoMeta" style="margin-top: 20px; display: none;">
-      <div class="result-row">
-        <span>Aportación mensual necesaria:</span>
-        <span id="aportacionMensualNecesaria" style="color: var(--verde); font-weight: bold;">$0.00</span>
-      </div>
-      <div class="result-row">
-        <span>Aportación total:</span>
-        <span id="aportacionTotalMeta">$0.00</span>
-      </div>
-      <div class="result-row">
-        <span>Interés generado:</span>
-        <span id="interesGeneradoMeta">$0.00</span>
+      <!-- Tabla de resultados por periodo -->
+      <div class="result-card">
+        <h3>Detalle por periodo</h3>
+        <div class="tabla-resultados">
+          <table id="tabla-detalle">
+            <thead>
+              <tr>
+                <th>Periodo</th>
+                <th>Depósito</th>
+                <th>Aportación</th>
+                <th>Interés</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpo-tabla">
+              <!-- Se llenará dinámicamente -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -357,6 +424,7 @@
     let totalAportaciones = 0;
     let totalInteres = 0;
     let capital = 0;
+    let resultadosDetallados = [];
 
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
@@ -451,7 +519,7 @@
       }
 
       // Calcular valores por periodo
-      const resultadosPorPeriodo = [];
+      resultadosDetallados = [];
       capital = capitalInicial;
       totalAportaciones = 0;
       totalInteres = 0;
@@ -464,6 +532,7 @@
       let mesActual = 0;
       let anioActual = 1;
       let periodoActual = 1;
+      let acumuladoAportaciones = 0;
 
       while (mesActual < plazoMesesTotal) {
         // Calcular interés del periodo
@@ -472,9 +541,12 @@
         capital += interesPeriodo;
 
         // Calcular aportaciones (solo en los periodos correspondientes)
+        let aportacionActual = 0;
         if (periodoActual % (frecuencia / frecuenciaAportacion) === 0) {
-          capital += aportacionPeriodica;
-          totalAportaciones += aportacionPeriodica;
+          aportacionActual = aportacionPeriodica;
+          capital += aportacionActual;
+          totalAportaciones += aportacionActual;
+          acumuladoAportaciones += aportacionActual;
         }
 
         // Determinar si es fin de año para registrar en resultados
@@ -486,13 +558,15 @@
                               `Año ${anioActual}` : 
                               `Mes ${mesActual + 1}`;
 
-          resultadosPorPeriodo.push({
+          resultadosDetallados.push({
             periodo: periodoLabel,
-            aportaciones: aportacionPeriodica * (periodoActual / (frecuencia / frecuenciaAportacion)),
-            intereses: interesPeriodo,
+            deposito: mesActual === 0 ? capitalInicial : 0,
+            aportacion: acumuladoAportaciones,
+            interes: interesPeriodo,
             total: capital
           });
 
+          acumuladoAportaciones = 0; // Resetear para el próximo periodo
           if (esFinDeAnio) anioActual++;
         }
 
@@ -506,8 +580,31 @@
       document.getElementById('res-intereses').textContent = formatCurrency(totalInteres);
       document.getElementById('res-total').textContent = formatCurrency(capital);
 
-      // Generar gráfico
-      generarGraficoBarras(resultadosPorPeriodo);
+      // Generar gráfico y tabla
+      generarGraficoBarras(resultadosDetallados);
+      actualizarTablaDetalle();
+    }
+
+    function actualizarTablaDetalle() {
+      const cuerpoTabla = document.getElementById('cuerpo-tabla');
+      cuerpoTabla.innerHTML = '';
+
+      if (resultadosDetallados.length === 0) return;
+
+      resultadosDetallados.forEach((item, index) => {
+        const fila = document.createElement('tr');
+        if (index === resultadosDetallados.length - 1) {
+          fila.classList.add('total-row');
+        }
+        fila.innerHTML = `
+          <td>${item.periodo}</td>
+          <td>${formatCurrency(item.deposito)}</td>
+          <td>${formatCurrency(item.aportacion)}</td>
+          <td>${formatCurrency(item.interes)}</td>
+          <td>${formatCurrency(item.total)}</td>
+        `;
+        cuerpoTabla.appendChild(fila);
+      });
     }
 
     function calcularMeta() {
@@ -568,8 +665,8 @@
       }
 
       const labels = datos.map(item => item.periodo);
-      const datosAportaciones = datos.map(item => item.aportaciones);
-      const datosIntereses = datos.map(item => item.intereses);
+      const datosAportaciones = datos.map(item => item.aportacion);
+      const datosIntereses = datos.map(item => item.interes);
 
       chartBarras = new Chart(ctx, {
         type: 'bar',
