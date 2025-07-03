@@ -1,7 +1,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Calculadora de Interés Compuesto</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -30,48 +30,60 @@
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--fondo-claro);
       color: var(--texto-claro);
-      padding: 20px;
+      padding: 15px;
       max-width: 1200px;
       margin: 0 auto;
       transition: background-color 0.4s, color 0.4s;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
     }
 
-    /* Estilos para el logo */
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      margin: 30px 0;
+    /* Header para móvil */
+    .mobile-header {
       text-align: center;
+      margin-bottom: 25px;
+      padding: 10px 0;
     }
 
-    .logo-img {
-      max-height: 180px;
-      width: auto;
-      object-fit: contain;
-      transition: transform 0.3s ease;
+    .mobile-header h1 {
+      color: var(--primario);
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+      font-weight: 600;
     }
 
-    .logo-img:hover {
-      transform: scale(1.05);
+    .mobile-header h2 {
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+      font-weight: 500;
     }
 
-    @media (max-width: 768px) {
-      .logo-img {
-        max-height: 140px;
-      }
+    .mobile-header h3 {
+      font-size: 1.1rem;
+      color: var(--secundario);
+      font-weight: 600;
+      margin-top: 5px;
+    }
+
+    /* Estilos para preguntas */
+    .mobile-question {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 12px;
+      font-style: italic;
+      display: block;
+    }
+
+    body.dark .mobile-question {
+      color: #aaa;
     }
 
     .calculadora-grid {
       display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 20px;
+      grid-template-columns: 1fr;
+      gap: 15px;
       margin-top: 10px;
-    }
-
-    @media (max-width: 768px) {
-      .calculadora-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
     .input-card, .result-card {
@@ -79,7 +91,7 @@
       border-radius: 10px;
       padding: 15px;
       margin-bottom: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     body.dark .input-card,
@@ -93,36 +105,38 @@
     .input-card h3, .result-card h3 {
       margin-top: 0;
       color: var(--primario);
-      border-bottom: 1px solid #eee;
       padding-bottom: 8px;
-      margin-bottom: 10px;
-      font-size: 1.1em;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    body.dark .input-card h3,
-    body.dark .result-card h3 {
-      border-color: #444;
+    .input-card h3 i {
+      font-size: 1.1rem;
     }
 
     .input-group {
-      margin-bottom: 12px;
+      margin-bottom: 15px;
     }
 
     .input-group label {
       display: block;
-      margin-bottom: 3px;
+      margin-bottom: 6px;
       font-weight: 600;
-      font-size: 0.9em;
+      font-size: 0.95rem;
     }
 
     input, select {
       width: 100%;
-      padding: 8px 10px;
+      padding: 12px 15px;
       border: 1px solid #ddd;
-      border-radius: 5px;
+      border-radius: 8px;
       background-color: #fff;
       transition: all 0.3s;
-      font-size: 0.9em;
+      font-size: 1rem;
+      -webkit-appearance: none;
     }
 
     body.dark input,
@@ -135,14 +149,17 @@
     .result-row {
       display: flex;
       justify-content: space-between;
-      margin: 10px 0;
+      margin: 12px 0;
+      font-size: 0.95rem;
     }
 
     .result-row.total {
       font-weight: bold;
       border-top: 1px solid #eee;
-      padding-top: 10px;
+      padding-top: 12px;
       color: var(--primario);
+      font-size: 1rem;
+      margin-top: 15px;
     }
 
     body.dark .result-row.total {
@@ -151,10 +168,11 @@
 
     .chart-container {
       background: white;
-      padding: 20px;
+      padding: 15px;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      height: 500px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      height: 350px;
+      margin-bottom: 15px;
     }
 
     canvas {
@@ -164,8 +182,8 @@
 
     .dark-mode-btn {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 15px;
+      right: 15px;
       z-index: 999;
       background-color: var(--primario);
       color: white;
@@ -174,17 +192,21 @@
       border-radius: 20px;
       cursor: pointer;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .whatsapp-btn {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
+      bottom: 20px;
+      right: 20px;
       z-index: 999;
       background-color: #25D366;
       color: white;
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -199,27 +221,27 @@
     }
 
     .whatsapp-btn i {
-      font-size: 30px;
+      font-size: 25px;
     }
 
     .results-table-container {
-      grid-column: 1 / -1;
-      margin-top: 20px;
+      margin-top: 15px;
     }
     
     .table-wrapper {
       overflow-x: auto;
-      max-height: 400px;
+      max-height: 300px;
       overflow-y: auto;
       margin-top: 15px;
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      -webkit-overflow-scrolling: touch;
     }
     
     #tablaResultados {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.85em;
+      font-size: 0.85rem;
     }
     
     #tablaResultados th, 
@@ -262,51 +284,98 @@
       border-color: #444;
     }
 
-    @media (max-width: 768px) {
+    /* Estilos para pantallas más grandes */
+    @media (min-width: 768px) {
+      body {
+        padding: 20px;
+      }
+      
+      .calculadora-grid {
+        grid-template-columns: 1fr 2fr;
+        gap: 20px;
+      }
+      
+      .chart-container {
+        height: 400px;
+        padding: 20px;
+      }
+      
       .dark-mode-btn {
-        top: 15px;
-        right: 15px;
-        padding: 6px 10px;
+        top: 20px;
+        right: 20px;
+        padding: 10px 15px;
       }
       
       .whatsapp-btn {
-        width: 50px;
-        height: 50px;
-        bottom: 20px;
-        right: 20px;
+        width: 60px;
+        height: 60px;
+        bottom: 30px;
+        right: 30px;
       }
+      
+      .whatsapp-btn i {
+        font-size: 30px;
+      }
+      
+      .mobile-header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .mobile-header h2 {
+        font-size: 1.5rem;
+      }
+      
+      .mobile-header h3 {
+        font-size: 1.3rem;
+      }
+    }
 
-      .chart-container {
-        height: 400px;
-      }
+    /* Mejoras para inputs en móviles */
+    input, select, button {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    
+    select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 1em;
+    }
+    
+    body.dark select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     }
   </style>
 </head>
 <body>
-  <button class="dark-mode-btn" onclick="toggleDarkMode()">🌙 Modo Oscuro</button>
+  <button class="dark-mode-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Modo Oscuro</button>
 
-  <!-- Logo centrado y más grande -->
-  <div class="logo-container">
-    <img src="Johan_Moran.PNG" alt="Logo" class="logo-img">
+  <!-- Header para móvil -->
+  <div class="mobile-header">
+    <h1>Calculadora de Inversión</h1>
+    <h2>Johan Moran</h2>
+    <h3>ASESOR FINANCIERO</h3>
   </div>
 
   <div class="calculadora-grid">
     <!-- Columna izquierda - Inputs -->
     <div class="input-section">
       <div class="input-card">
-        <h3>Depósito inicial</h3>
+        <h3><i class="fas fa-coins"></i> Monto Inicial</h3>
+        <span class="mobile-question">¿Con qué cantidad cuentas en este momento? ¿Con cuánto empezarás tu inversión?</span>
         <div class="input-group">
-          <label for="capitalInicial">Monto:</label>
           <input type="text" id="capitalInicial" placeholder="$0">
         </div>
         <div class="input-group">
           <label for="tasa">Tasa de interés anual (%):</label>
+          <span class="mobile-question">¿Cuál es la tasa de rendimiento anual que te está ofreciendo la institución financiera?</span>
           <input type="number" id="tasa" step="0.01" placeholder="0">
         </div>
       </div>
 
       <div class="input-card">
-        <h3>Plazo para invertir</h3>
+        <h3><i class="far fa-calendar-alt"></i> Plazo para invertir</h3>
         <div class="input-group">
           <label for="tipoPlazo">Tipo de plazo:</label>
           <select id="tipoPlazo">
@@ -316,6 +385,7 @@
         </div>
         <div class="input-group">
           <label id="labelPlazo" for="plazo">Cantidad de años:</label>
+          <span class="mobile-question">¿Cuántos años vas a realizar la inversión? ¿Cuál es tu horizonte de inversión?</span>
           <input type="number" id="plazo" min="1" placeholder="0">
         </div>
         <div class="input-group">
@@ -330,9 +400,10 @@
       </div>
 
       <div class="input-card">
-        <h3>Aportaciones adicionales</h3>
+        <h3><i class="fas fa-hand-holding-usd"></i> Aportaciones adicionales</h3>
         <div class="input-group">
           <label for="aportacion">Monto:</label>
+          <span class="mobile-question">¿Cuánto podrás aportar periódicamente a tu inversión?</span>
           <input type="text" id="aportacion" placeholder="$0">
         </div>
         <div class="input-group">
@@ -350,7 +421,7 @@
     <!-- Columna derecha - Resultados -->
     <div class="results-section">
       <div class="result-card">
-        <h3>Resumen de inversión</h3>
+        <h3><i class="fas fa-chart-pie"></i> Resumen de inversión</h3>
         <div class="result-row">
           <span>Depósito inicial</span>
           <span id="res-inicial">$0.00</span>
@@ -377,7 +448,7 @@
     <!-- Tabla de resultados detallados -->
     <div class="results-table-container">
       <div class="input-card">
-        <h3>Detalle de crecimiento</h3>
+        <h3><i class="fas fa-table"></i> Detalle de crecimiento</h3>
         <div class="table-wrapper">
           <table id="tablaResultados">
             <thead>
@@ -432,9 +503,11 @@
         if (this.value === 'mensual') {
           labelPlazo.textContent = 'Cantidad de meses:';
           document.getElementById('plazo').placeholder = '0';
+          document.querySelector('.mobile-question', this.parentElement.parentElement).textContent = '¿Cuántos meses vas a realizar la inversión?';
         } else {
           labelPlazo.textContent = 'Cantidad de años:';
           document.getElementById('plazo').placeholder = '0';
+          document.querySelector('.mobile-question', this.parentElement.parentElement).textContent = '¿Cuántos años vas a realizar la inversión?';
         }
         calcular();
       });
@@ -445,6 +518,14 @@
 
     function toggleDarkMode() {
       document.body.classList.toggle("dark");
+      const icon = document.querySelector('.dark-mode-btn i');
+      if (document.body.classList.contains("dark")) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
       if (chartBarras) {
         chartBarras.update();
       }
@@ -635,6 +716,10 @@
               stacked: true,
               grid: {
                 display: false
+              },
+              ticks: {
+                maxRotation: 45,
+                minRotation: 45
               }
             },
             y: {
