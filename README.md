@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -6,6 +7,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Librerías para exportación -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
       --fondo-claro: #f4f6f8;
@@ -40,83 +46,81 @@
       -webkit-text-size-adjust: 100%;
     }
   
-    /* Header ejecutivo - Modificado para logo más grande */
-     .executive-header {
-      background-color: #ffffff;
+    /* Logo hero */
+    .logo-hero {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto 30px;
       padding: 20px;
-      margin-bottom: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       display: flex;
       justify-content: center;
       align-items: center;
-      border-bottom: none; /* Eliminamos el borde inferior */
+      background: transparent;
     }
     
-    body.dark .executive-header {
-      background-color: #1a1a1a;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    .hero-logo {
+      width: 90%;
+      max-width: 1000px;
+      height: auto;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
     
-  .logo-executive-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-    
-  .executive-logo {
-    width: 250px;  /* Tamaño aumentado */
-    height: 250px; /* Tamaño aumentado */
-    object-fit: contain;
-    border-radius: 0;
-    padding: 10px;
-    border: none; /* Eliminamos bordes */
-    margin: 0; /* Eliminamos márgenes */
-  }
-    /* Ajustes para móviles */
-  @media (max-width: 768px) {
-    .executive-logo {
-      width: 200px;
-      height: 200px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .executive-logo {
-      width: 180px;
-      height: 180px;
-    }
-  }
-    body.dark .executive-logo {
-      border-right-color: #444;
+    body.dark .hero-logo {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
     }
     
-    .header-titles h1 {
-      margin: 0;
-      font-size: 1.8rem;
+    .hero-logo:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Botones de exportación */
+    .export-buttons {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+    
+    .export-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
       font-weight: 600;
-      color: #2b2b2b;
-      letter-spacing: -0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
     }
     
-    body.dark .header-titles h1 {
-      color: #f0f0f0;
+    .pdf-btn {
+      background-color: #e74c3c;
+      color: white;
     }
     
-    .subtitle {
-      margin: 5px 0 0;
-      font-size: 1rem;
-      color: #666;
-      font-weight: 400;
-      letter-spacing: 0.5px;
+    .pdf-btn:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
     }
     
-    body.dark .subtitle {
-      color: #aaa;
+    .excel-btn {
+      background-color: #2ecc71;
+      color: white;
+    }
+    
+    .excel-btn:hover {
+      background-color: #27ae60;
+      transform: translateY(-2px);
     }
 
-    /* Resto del CSS permanece igual... */
+    /* Resto del CSS... (mantén todo el CSS anterior que ya tenías) */
     .tooltip-container {
       position: relative;
       display: inline-block;
@@ -573,42 +577,29 @@
     
     /* Responsive para móviles */
     @media (max-width: 768px) {
-      .executive-header {
-        padding: 20px;
+      .hero-logo {
+        width: 95%;
+        border-radius: 15px;
       }
       
-      .logo-executive-container {
+      .export-buttons {
         flex-direction: column;
-        text-align: center;
-        gap: 15px;
-      }
-      
-      .executive-logo {
-        width: 120px;  /* Tamaño aumentado para móvil */
-        height: 120px; /* Tamaño aumentado para móvil */
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
-        padding-bottom: 15px;
-        margin-bottom: 10px;
-        margin-right: 0;
-      }
-      
-      .header-titles h1 {
-        font-size: 1.4rem;
-      }
-      
-      .subtitle {
-        font-size: 0.9rem;
-      }
-      
-      .summary-grid {
-        grid-template-columns: 1fr;
+        align-items: center;
       }
     }
     
-    @media (max-width: 600px) {
+    @media (max-width: 480px) {
       body {
         padding: 10px;
+      }
+      
+      .hero-logo {
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      body.dark .hero-logo {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       }
       
       .input-card, .result-card {
@@ -624,12 +615,11 @@
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Modo Oscuro</button>
 
-  <!-- Header ejecutivo con logo más grande -->
-  <div class="executive-header">
-  <div class="logo-executive-container">
-    <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="executive-logo">
+  <!-- Logo hero -->
+  <div class="logo-hero">
+    <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="hero-logo">
   </div>
-</div>
+
   <div class="calculadora-grid">
     <!-- Columna izquierda - Inputs -->
     <div class="input-section">
@@ -777,6 +767,16 @@
         <canvas id="graficaBarras"></canvas>
       </div>
       
+      <!-- Botones de exportación -->
+      <div class="export-buttons">
+        <button onclick="exportToPDF()" class="export-btn pdf-btn">
+          <i class="fas fa-file-pdf"></i> Exportar a PDF
+        </button>
+        <button onclick="exportToExcel()" class="export-btn excel-btn">
+          <i class="fas fa-file-excel"></i> Exportar a Excel
+        </button>
+      </div>
+      
       <!-- Tabla de resultados detallados -->
       <div class="results-table-container">
         <div class="input-card">
@@ -802,7 +802,7 @@
     </div>
   </div>
 
-  <!-- Sección de Preguntas Frecuentes Actualizada -->
+  <!-- Sección de Preguntas Frecuentes -->
   <div class="faq-section" style="margin-top: 40px; margin-bottom: 60px;">
     <div class="input-card">
       <h3><i class="fas fa-question-circle"></i> Preguntas frecuentes</h3>
@@ -1328,6 +1328,215 @@
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       }).format(value);
+    }
+
+    // Función para exportar a PDF
+    async function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      // Estilos para el PDF
+      const primaryColor = '#2b6777';
+      const secondaryColor = '#52ab98';
+      const textColor = '#333333';
+      
+      // Logo (usaremos html2canvas para capturarlo)
+      const logoElement = document.querySelector('.hero-logo');
+      const logoCanvas = await html2canvas(logoElement);
+      const logoData = logoCanvas.toDataURL('image/png');
+      
+      // 1. Encabezado con logo
+      doc.addImage(logoData, 'PNG', 15, 15, 50, 50); // Ajusta tamaño según necesidad
+      
+      // 2. Título del reporte
+      doc.setFontSize(18);
+      doc.setTextColor(primaryColor);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Reporte de Inversión - Interés Compuesto', 105, 30, { align: 'center' });
+      
+      // 3. Fecha de generación
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Generado el: ${new Date().toLocaleDateString()}`, 105, 38, { align: 'center' });
+      
+      // 4. Sección de Resumen
+      doc.setFontSize(14);
+      doc.setTextColor(primaryColor);
+      doc.text('Resumen de la Inversión', 15, 60);
+      
+      doc.setDrawColor(primaryColor);
+      doc.setLineWidth(0.5);
+      doc.line(15, 62, 60, 62);
+      
+      // Datos resumen en formato tabla
+      const summaryData = [
+        ['Depósito Inicial:', document.getElementById('res-inicial').textContent],
+        ['Aportaciones:', document.getElementById('res-aportaciones').textContent],
+        ['Intereses Acumulados:', document.getElementById('res-intereses').textContent],
+        ['Total Acumulado:', document.getElementById('res-total').textContent],
+        ['Tasa Anual:', document.getElementById('tasa').value + '%'],
+        ['Plazo:', document.getElementById('plazo').value + ' ' + 
+         (document.getElementById('tipoPlazo').value === 'mensual' ? 'meses' : 'años')]
+      ];
+      
+      doc.setFontSize(11);
+      doc.setTextColor(textColor);
+      
+      summaryData.forEach((row, i) => {
+        doc.setFont('helvetica', 'bold');
+        doc.text(row[0], 15, 70 + (i * 7));
+        doc.setFont('helvetica', 'normal');
+        doc.text(row[1], 60, 70 + (i * 7));
+      });
+      
+      // 5. Gráfico
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.setTextColor(primaryColor);
+      doc.text('Proyección de Crecimiento', 105, 20, { align: 'center' });
+      
+      const chartElement = document.getElementById('graficaBarras');
+      const chartCanvas = await html2canvas(chartElement);
+      const chartData = chartCanvas.toDataURL('image/png');
+      
+      // Ajustar imagen del gráfico al ancho de la página (menos márgenes)
+      const imgWidth = doc.internal.pageSize.getWidth() - 30;
+      const imgHeight = (chartCanvas.height * imgWidth) / chartCanvas.width;
+      doc.addImage(chartData, 'PNG', 15, 30, imgWidth, imgHeight);
+      
+      // 6. Tabla Amortizada
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.setTextColor(primaryColor);
+      doc.text('Detalle de Periodos', 105, 20, { align: 'center' });
+      
+      // Preparar datos de la tabla
+      const tableData = [];
+      const rows = document.querySelectorAll('#tablaResultados tbody tr');
+      
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        tableData.push([
+          cells[0].textContent.trim(),
+          cells[1].textContent.trim(),
+          cells[2].textContent.trim(),
+          cells[3].textContent.trim(),
+          cells[4].textContent.trim()
+        ]);
+      });
+      
+      // Encabezados de la tabla
+      const headers = [
+        'Periodo',
+        'Depósito Inicial',
+        'Aportaciones',
+        'Intereses',
+        'Total Acumulado'
+      ];
+      
+      // Estilo de la tabla
+      doc.autoTable({
+        head: [headers],
+        body: tableData,
+        startY: 30,
+        theme: 'grid',
+        headStyles: {
+          fillColor: primaryColor,
+          textColor: 255,
+          fontStyle: 'bold'
+        },
+        alternateRowStyles: {
+          fillColor: [242, 242, 242]
+        },
+        columnStyles: {
+          0: { cellWidth: 'auto', halign: 'center' },
+          1: { cellWidth: 'auto', halign: 'right' },
+          2: { cellWidth: 'auto', halign: 'right' },
+          3: { cellWidth: 'auto', halign: 'right' },
+          4: { cellWidth: 'auto', halign: 'right', fontStyle: 'bold' }
+        },
+        margin: { top: 30 }
+      });
+      
+      // Pie de página
+      const pageCount = doc.internal.getNumberOfPages();
+      for(let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() - 25, doc.internal.pageSize.getHeight() - 10);
+      }
+      
+      doc.save('Reporte_Inversion.pdf');
+    }
+
+    // Función para exportar a Excel
+    function exportToExcel() {
+      // Preparar datos
+      const wb = XLSX.utils.book_new();
+      
+      // 1. Hoja de Resumen
+      const summaryData = [
+        ['REPORTE DE INVERSIÓN - INTERÉS COMPUESTO'],
+        ['Generado el:', new Date().toLocaleDateString()],
+        [],
+        ['RESUMEN DE LA INVERSIÓN'],
+        ['Depósito Inicial:', document.getElementById('res-inicial').textContent],
+        ['Aportaciones:', document.getElementById('res-aportaciones').textContent],
+        ['Intereses Acumulados:', document.getElementById('res-intereses').textContent],
+        ['Total Acumulado:', document.getElementById('res-total').textContent],
+        ['Tasa Anual:', document.getElementById('tasa').value + '%'],
+        ['Plazo:', document.getElementById('plazo').value + ' ' + 
+         (document.getElementById('tipoPlazo').value === 'mensual' ? 'meses' : 'años')],
+        [],
+        ['DETALLE DE PERIODOS']
+      ];
+      
+      // 2. Datos de la tabla
+      const tableHeaders = [];
+      document.querySelectorAll('#tablaResultados thead th').forEach(th => {
+        tableHeaders.push(th.textContent.trim());
+      });
+      
+      const tableData = [tableHeaders];
+      document.querySelectorAll('#tablaResultados tbody tr').forEach(row => {
+        const rowData = [];
+        row.querySelectorAll('td').forEach(cell => {
+          rowData.push(cell.textContent.trim());
+        });
+        tableData.push(rowData);
+      });
+      
+      // Combinar todos los datos
+      const allData = [...summaryData, ...tableData];
+      
+      const ws = XLSX.utils.aoa_to_sheet(allData);
+      
+      // Aplicar estilos y formatos
+      // 1. Fusionar celdas para títulos
+      if(!ws['!merges']) ws['!merges'] = [];
+      ws['!merges'].push({ s: { r: 0, c: 0 }, e: { r: 0, c: 4 } });
+      ws['!merges'].push({ s: { r: 3, c: 0 }, e: { r: 3, c: 4 } });
+      ws['!merges'].push({ s: { r: 11, c: 0 }, e: { r: 11, c: 4 } });
+      
+      // 2. Establecer anchos de columnas
+      ws['!cols'] = [
+        { wch: 15 }, // Periodo
+        { wch: 20 }, // Depósito inicial
+        { wch: 15 }, // Aportaciones
+        { wch: 15 }, // Intereses
+        { wch: 20 }  // Total acumulado
+      ];
+      
+      XLSX.utils.book_append_sheet(wb, ws, "Reporte de Inversión");
+      
+      // Generar archivo
+      XLSX.writeFile(wb, 'Reporte_Inversion.xlsx');
     }
   </script>
 </body>
