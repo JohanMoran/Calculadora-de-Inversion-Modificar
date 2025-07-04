@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -6,6 +5,7 @@
   <title>Calculadora de Interés Compuesto</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --fondo-claro: #f4f6f8;
@@ -18,7 +18,7 @@
       --verde: #28a745;
       --verde-hover: #218838;
     }
-
+  
     body.dark {
       --fondo-claro: #121212;
       --texto-claro: #e0e0e0;
@@ -26,77 +26,79 @@
       --secundario: #2d8273;
       --terciario: #5a6d80;
     }
-
+  
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--fondo-claro);
       color: var(--texto-claro);
-      padding: 10px;
+      padding: 15px;
       max-width: 1200px;
       margin: 0 auto;
       transition: background-color 0.4s, color 0.4s;
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 15px;
+      line-height: 1.6;
       -webkit-text-size-adjust: 100%;
     }
-
-    /* Estilos para el header ejecutivo */
-    .header-container {
-      text-align: center;
-      margin: 20px 0 30px;
-      padding: 20px 0;
-      border-bottom: 1px solid rgba(43, 103, 119, 0.2);
+  
+    /* Header ejecutivo */
+    .executive-header {
+      background-color: #ffffff;
+      padding: 25px 40px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border-bottom: 4px solid var(--primario);
     }
     
-    body.dark .header-container {
-      border-color: rgba(200, 216, 228, 0.2);
+    body.dark .executive-header {
+      background-color: #1a1a1a;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      border-bottom-color: var(--secundario);
     }
     
-    .logo-container {
-      display: inline-block;
-      text-align: center;
-      transition: all 0.3s ease;
+    .logo-executive-container {
+      display: flex;
+      align-items: center;
+      gap: 25px;
     }
     
-    .logo-ejecutivo {
-      max-width: 300px;
-      height: auto;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-      transition: transform 0.3s ease, filter 0.3s ease;
+    .executive-logo {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 0;
+      padding: 10px;
+      border-right: 1px solid #e0e0e0;
     }
     
-    .logo-ejecutivo:hover {
-      transform: scale(1.02);
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    body.dark .executive-logo {
+      border-right-color: #444;
     }
     
-    .logo-subtitle {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      color: var(--primario);
+    .header-titles h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2b2b2b;
+      letter-spacing: -0.5px;
+    }
+    
+    body.dark .header-titles h1 {
+      color: #f0f0f0;
+    }
+    
+    .subtitle {
+      margin: 5px 0 0;
+      font-size: 1rem;
+      color: #666;
+      font-weight: 400;
       letter-spacing: 0.5px;
-      font-weight: 500;
-      background: linear-gradient(90deg, var(--primario), var(--secundario));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      padding-bottom: 3px;
     }
     
-    body.dark .logo-subtitle {
-      color: var(--terciario);
+    body.dark .subtitle {
+      color: #aaa;
     }
-    
-    .logo-container::after {
-      content: "";
-      display: block;
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--primario), var(--secundario));
-      margin: 15px auto 0;
-      border-radius: 3px;
-    }
-
+  
     /* Tooltips */
     .tooltip-container {
       position: relative;
@@ -134,30 +136,37 @@
       visibility: visible;
       opacity: 1;
     }
-
+  
     .calculadora-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 5px;
+      gap: 15px;
     }
-
+  
     .input-card, .result-card {
       background: white;
       border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #e0e0e0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
+    
+    .input-card:hover, .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  
     body.dark .input-card,
     body.dark .result-card,
     body.dark .chart-container,
     body.dark .table-wrapper {
       background: #1e1e1e;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      border-color: #333;
     }
-
+  
     .input-card h3, .result-card h3 {
       margin-top: 0;
       color: var(--primario);
@@ -167,23 +176,25 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
     }
-
+  
     .input-card h3 i {
       font-size: 1rem;
     }
-
+  
     .input-group {
       margin-bottom: 12px;
     }
-
+  
     .input-group label {
       display: block;
       margin-bottom: 4px;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 0.9rem;
     }
-
+  
     input, select {
       width: 100%;
       padding: 10px 12px;
@@ -194,75 +205,156 @@
       font-size: 0.95rem;
       -webkit-appearance: none;
     }
-
+  
     body.dark input,
     body.dark select {
       background-color: #2a2a2a;
       color: #e0e0e0;
       border-color: #555;
     }
-
-    .result-row {
+  
+    /* Estilos para el resumen tipo infografía */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .summary-item {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
       display: flex;
-      justify-content: space-between;
-      margin: 10px 0;
-      font-size: 0.9rem;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--primario);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    .result-row.total {
-      font-weight: bold;
-      border-top: 1px solid #eee;
-      padding-top: 10px;
+    
+    body.dark .summary-item {
+      background: #2a2a2a;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    
+    .summary-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .summary-item.total {
+      border-left-color: var(--verde);
+      background-color: rgba(40, 167, 69, 0.05);
+    }
+    
+    body.dark .summary-item.total {
+      background-color: rgba(40, 167, 69, 0.1);
+    }
+    
+    .summary-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--terciario);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: var(--primario);
-      font-size: 0.95rem;
-      margin-top: 12px;
+      font-size: 1.1rem;
+      flex-shrink: 0;
     }
-
-    body.dark .result-row.total {
-      border-color: #444;
+    
+    body.dark .summary-icon {
+      background-color: #3a3a3a;
     }
-
+    
+    .summary-item.total .summary-icon {
+      background-color: rgba(40, 167, 69, 0.2);
+      color: var(--verde);
+    }
+    
+    .summary-content {
+      flex-grow: 1;
+    }
+    
+    .summary-label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    body.dark .summary-label {
+      color: #aaa;
+    }
+    
+    .summary-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texto-claro);
+    }
+    
+    .summary-item.total .summary-value {
+      color: var(--verde);
+      font-size: 1.2rem;
+    }
+  
     .chart-container {
       background: white;
-      padding: 12px;
+      padding: 15px;
       border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       height: 300px;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #e0e0e0;
     }
-
+  
     canvas {
       width: 100% !important;
       height: 100% !important;
     }
-
+  
     .dark-mode-btn {
       position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 999;
-      background-color: var(--primario);
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background-color: #2b2b2b;
       color: white;
       border: none;
-      padding: 6px 12px;
-      border-radius: 20px;
+      padding: 8px 16px;
+      border-radius: 6px;
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       font-size: 0.85rem;
       display: flex;
       align-items: center;
       gap: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: all 0.3s;
     }
-
+    
+    body.dark .dark-mode-btn {
+      background-color: #f0f0f0;
+      color: #2b2b2b;
+    }
+  
+    .dark-mode-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+  
     .whatsapp-btn {
       position: fixed;
-      bottom: 15px;
-      right: 15px;
+      bottom: 20px;
+      right: 20px;
       z-index: 999;
       background-color: #25D366;
       color: white;
-      width: 45px;
-      height: 45px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -270,18 +362,18 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       transition: all 0.3s;
     }
-
+  
     .whatsapp-btn:hover {
       background-color: #128C7E;
       transform: scale(1.1);
     }
-
+  
     .whatsapp-btn i {
-      font-size: 22px;
+      font-size: 25px;
     }
-
+  
     .results-table-container {
-      margin-top: 12px;
+      margin-top: 15px;
     }
     
     .table-wrapper {
@@ -292,17 +384,18 @@
       border-radius: 6px;
       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
       -webkit-overflow-scrolling: touch;
+      border: 1px solid #e0e0e0;
     }
     
     #tablaResultados {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
     
     #tablaResultados th, 
     #tablaResultados td {
-      padding: 8px 10px;
+      padding: 10px 12px;
       text-align: right;
       border-bottom: 1px solid #eee;
     }
@@ -314,6 +407,7 @@
       top: 0;
       text-align: center;
       font-size: 0.85rem;
+      font-weight: 500;
     }
     
     #tablaResultados tr:nth-child(even) {
@@ -340,105 +434,8 @@
     body.dark #tablaResultados td {
       border-color: #444;
     }
-
-    /* Estilos para pantallas más grandes */
-    @media (min-width: 768px) {
-      body {
-        padding: 15px;
-        font-size: 15px;
-      }
-      
-      .calculadora-grid {
-        grid-template-columns: 1.1fr 2fr;
-        gap: 15px;
-      }
-      
-      .input-section {
-        min-width: 380px;
-      }
-      
-      .chart-container {
-        height: 400px;
-      }
-      
-      .dark-mode-btn {
-        top: 15px;
-        right: 15px;
-        padding: 8px 15px;
-      }
-      
-      .whatsapp-btn {
-        width: 50px;
-        height: 50px;
-        bottom: 20px;
-        right: 20px;
-      }
-      
-      .whatsapp-btn i {
-        font-size: 25px;
-      }
-      
-      .logo-ejecutivo {
-        max-width: 350px;
-      }
-      
-      .logo-subtitle {
-        font-size: 1.2rem;
-        margin-top: 10px;
-      }
-      
-      .input-card, .result-card {
-        padding: 15px;
-      }
-      
-      .input-card h3, .result-card h3 {
-        font-size: 1.15rem;
-      }
-      
-      .result-row {
-        font-size: 0.95rem;
-      }
-      
-      #tablaResultados {
-        font-size: 0.85rem;
-      }
-      
-      .tooltip-text {
-        width: 250px;
-        font-size: 0.9rem;
-      }
-      
-      .header-container {
-        margin: 30px 0 40px;
-        padding: 30px 0;
-      }
-    }
-
-    /* Estilos para pantallas muy grandes */
-    @media (min-width: 992px) {
-      .calculadora-grid {
-        grid-template-columns: 1.2fr 3fr;
-      }
-      
-      .input-section {
-        min-width: 400px;
-      }
-      
-      .chart-container {
-        height: 450px;
-      }
-      
-      .logo-ejecutivo {
-        max-width: 400px;
-      }
-    }
-
-    /* Mejoras para inputs en móviles */
-    input, select, button {
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    
+  
+    /* Estilos para select */
     select {
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       background-repeat: no-repeat;
@@ -449,16 +446,103 @@
     body.dark select {
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     }
+    
+    /* Mensajes de error */
+    .error-mensaje {
+      color: #dc3545 !important;
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+    
+    body.dark .error-mensaje {
+      color: #ff6b6b !important;
+    }
+    
+    .warning-message {
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+    
+    body.dark .warning-message {
+      background-color: #343a40;
+      color: #ffeeba;
+    }
+    
+    /* Responsive para pantallas más grandes */
+    @media (min-width: 768px) {
+      .calculadora-grid {
+        grid-template-columns: 1.1fr 2fr;
+      }
+      
+      .chart-container {
+        height: 400px;
+      }
+    }
+    
+    /* Responsive para móviles */
+    @media (max-width: 768px) {
+      .executive-header {
+        padding: 20px;
+      }
+      
+      .logo-executive-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      .executive-logo {
+        width: 80px;
+        height: 80px;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 15px;
+        margin-bottom: 10px;
+      }
+      
+      .header-titles h1 {
+        font-size: 1.4rem;
+      }
+      
+      .subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      
+      .input-card, .result-card {
+        padding: 12px;
+      }
+      
+      .summary-item {
+        padding: 12px;
+      }
+    }
   </style>
 </head>
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Modo Oscuro</button>
 
-  <!-- Header con logo mejorado -->
-  <div class="header-container">
-    <div class="logo-container">
-      <img src="Johan_Moran.PNG" alt="Johan Moran - Asesor Financiero" class="logo-ejecutivo">
-      <div class="logo-subtitle">Asesoría Financiera Profesional</div>
+  <!-- Header ejecutivo -->
+  <div class="executive-header">
+    <div class="logo-executive-container">
+      <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="executive-logo">
+      <div class="header-titles">
+        <h1>Calculadora de Interés Compuesto</h1>
+        <p class="subtitle">Herramienta profesional de proyección financiera</p>
+      </div>
     </div>
   </div>
 
@@ -562,21 +646,46 @@
     <div class="results-section">
       <div class="result-card">
         <h3><i class="fas fa-chart-pie"></i> Resumen de inversión</h3>
-        <div class="result-row">
-          <span>Depósito inicial</span>
-          <span id="res-inicial">$0.00</span>
-        </div>
-        <div class="result-row">
-          <span>Depósitos adicionales</span>
-          <span id="res-aportaciones">$0.00</span>
-        </div>
-        <div class="result-row">
-          <span>Interés acumulado</span>
-          <span id="res-intereses">$0.00</span>
-        </div>
-        <div class="result-row total">
-          <span>Total acumulado</span>
-          <span id="res-total">$0.00</span>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-icon">
+              <i class="fas fa-piggy-bank"></i>
+            </div>
+            <div class="summary-content">
+              <div class="summary-label">Depósito inicial</div>
+              <div class="summary-value" id="res-inicial">$0.00</div>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <div class="summary-icon">
+              <i class="fas fa-hand-holding-usd"></i>
+            </div>
+            <div class="summary-content">
+              <div class="summary-label">Depósitos adicionales</div>
+              <div class="summary-value" id="res-aportaciones">$0.00</div>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <div class="summary-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="summary-content">
+              <div class="summary-label">Interés acumulado</div>
+              <div class="summary-value" id="res-intereses">$0.00</div>
+            </div>
+          </div>
+          
+          <div class="summary-item total">
+            <div class="summary-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <div class="summary-content">
+              <div class="summary-label">Total acumulado</div>
+              <div class="summary-value" id="res-total">$0.00</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -620,6 +729,7 @@
     let totalAportaciones = 0;
     let totalInteres = 0;
     let capital = 0;
+    const MAX_PERIODOS_TABLA = 60; // Mostrar máximo 5 años en meses
 
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
@@ -709,6 +819,9 @@
     }
 
     function calcular() {
+      // Limpiar mensajes de error previos
+      document.querySelectorAll('.error-mensaje').forEach(el => el.remove());
+      
       // Obtener valores de los inputs
       const capitalInicial = parseFloat(document.getElementById('capitalInicial').value.replace(/[^0-9.]/g, '')) || 0;
       const tasaAnual = parseFloat(document.getElementById('tasa').value) || 0;
@@ -718,8 +831,24 @@
       const aportacion = parseFloat(document.getElementById('aportacion').value.replace(/[^0-9.]/g, '')) || 0;
       const frecuenciaAportacion = parseInt(document.getElementById('frecuenciaAportacion').value) || 12;
 
-      // Validaciones básicas
-      if (plazo <= 0 || tasaAnual <= 0) {
+      // Validaciones
+      if (capitalInicial < 0) {
+        mostrarError('capitalInicial', 'El depósito inicial no puede ser negativo');
+        return;
+      }
+      
+      if (tasaAnual < 0) {
+        mostrarError('tasa', 'La tasa de interés no puede ser negativa');
+        return;
+      }
+      
+      if (plazo <= 0) {
+        mostrarError('plazo', 'El plazo debe ser mayor a cero');
+        return;
+      }
+      
+      if (aportacion < 0) {
+        mostrarError('aportacion', 'Las aportaciones no pueden ser negativas');
         return;
       }
 
@@ -728,7 +857,7 @@
       const totalMeses = tipoPlazo === 'mensual' ? plazo : plazo * 12;
 
       // Calcular valores
-      const resultados = [];
+      let resultados = [];
       capital = capitalInicial;
       totalAportaciones = 0;
       totalInteres = 0;
@@ -808,9 +937,36 @@
       document.getElementById('res-intereses').textContent = formatCurrency(totalInteres);
       document.getElementById('res-total').textContent = formatCurrency(capital);
 
+      // Limitar visualización en tabla si son muchos periodos
+      if (periodos > MAX_PERIODOS_TABLA) {
+        const container = document.querySelector('.results-table-container');
+        const existingWarning = document.querySelector('.warning-message');
+        
+        if (!existingWarning) {
+          const warning = document.createElement('div');
+          warning.className = 'warning-message';
+          warning.innerHTML = `<i class="fas fa-info-circle"></i> Se muestran solo los primeros ${MAX_PERIODOS_TABLA} periodos. Usa el gráfico para ver el comportamiento completo.`;
+          container.insertBefore(warning, container.firstChild);
+        }
+        
+        resultados = resultados.slice(0, MAX_PERIODOS_TABLA);
+      }
+
       // Generar gráfico y tabla
       generarGraficoBarras(resultados, labels);
       generarTabla(resultados, tipoPlazo === 'mensual');
+    }
+
+    function mostrarError(inputId, mensaje) {
+      const input = document.getElementById(inputId);
+      const existingError = input.parentNode.querySelector('.error-mensaje');
+      
+      if (!existingError) {
+        const error = document.createElement('div');
+        error.className = 'error-mensaje';
+        error.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${mensaje}`;
+        input.parentNode.appendChild(error);
+      }
     }
 
     function generarGraficoBarras(datos, labels) {
