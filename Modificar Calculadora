@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -41,7 +40,7 @@
       -webkit-text-size-adjust: 100%;
     }
   
-    /* Header ejecutivo */
+    /* Header ejecutivo - Modificado para logo más grande */
     .executive-header {
       background-color: #ffffff;
       padding: 20px 40px;
@@ -64,12 +63,13 @@
     }
     
     .executive-logo {
-      width: 150px;
-      height: 150px;
+      width: 180px;  /* Tamaño aumentado */
+      height: 180px; /* Tamaño aumentado */
       object-fit: contain;
       border-radius: 0;
       padding: 10px;
       border-right: 1px solid #e0e0e0;
+      margin-right: 15px; /* Espacio adicional */
     }
     
     body.dark .executive-logo {
@@ -99,8 +99,8 @@
     body.dark .subtitle {
       color: #aaa;
     }
-  
-    /* Tooltips */
+
+    /* Resto del CSS permanece igual... */
     .tooltip-container {
       position: relative;
       display: inline-block;
@@ -568,12 +568,13 @@
       }
       
       .executive-logo {
-        width: 100px;
-        height: 100px;
+        width: 120px;  /* Tamaño aumentado para móvil */
+        height: 120px; /* Tamaño aumentado para móvil */
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
         padding-bottom: 15px;
         margin-bottom: 10px;
+        margin-right: 0;
       }
       
       .header-titles h1 {
@@ -607,7 +608,7 @@
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Modo Oscuro</button>
 
-  <!-- Header ejecutivo -->
+  <!-- Header ejecutivo con logo más grande -->
   <div class="executive-header">
     <div class="logo-executive-container">
       <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="executive-logo">
@@ -790,20 +791,59 @@
     </div>
   </div>
 
-  <!-- Sección de Preguntas Frecuentes -->
+  <!-- Sección de Preguntas Frecuentes Actualizada -->
   <div class="faq-section" style="margin-top: 40px; margin-bottom: 60px;">
     <div class="input-card">
       <h3><i class="fas fa-question-circle"></i> Preguntas frecuentes</h3>
       
-      <!-- Pregunta 1 -->
+      <!-- Pregunta 1 - Actualizada -->
       <div class="faq-item">
         <button class="faq-question">¿Qué es y cómo funciona la frecuencia anual de interés?</button>
         <div class="faq-answer">
-          <p>La frecuencia anual de interés determina con qué frecuencia se capitalizan los intereses en tu inversión. Cuanto más frecuente sea la capitalización (mensual vs anual, por ejemplo), mayor será el rendimiento debido al efecto del interés compuesto.</p>
+          <p>Número de veces al año que se agrega el interés al capital (interés compuesto), ejemplos:</p>
+          
+          <div class="table-wrapper" style="margin-top: 15px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr>
+                  <th style="padding: 10px; background-color: var(--primario); color: white; text-align: left;">Tipo de interés</th>
+                  <th style="padding: 10px; background-color: var(--primario); color: white; text-align: left;">Tiempo</th>
+                  <th style="padding: 10px; background-color: var(--primario); color: white; text-align: left;">Repeticiones al año</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Anual</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés una vez al año.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">1</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Mensual</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada mes.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">12</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Quincenal</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada quince días.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">24</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Semanal</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada 7 días.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">52</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Diario</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada día.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">365</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       
-      <!-- Pregunta 2 -->
+      <!-- Pregunta 2 se mantiene igual -->
       <div class="faq-item">
         <button class="faq-question">¿Cómo funcionan las aportaciones adicionales?</button>
         <div class="faq-answer">
