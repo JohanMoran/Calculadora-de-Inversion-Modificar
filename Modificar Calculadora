@@ -44,7 +44,7 @@
     /* Header ejecutivo */
     .executive-header {
       background-color: #ffffff;
-      padding: 25px 40px;
+      padding: 20px 40px;
       margin-bottom: 30px;
       border-radius: 8px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -60,12 +60,12 @@
     .logo-executive-container {
       display: flex;
       align-items: center;
-      gap: 25px;
+      gap: 20px;
     }
     
     .executive-logo {
-      width: 120px;
-      height: 120px;
+      width: 150px;
+      height: 150px;
       object-fit: contain;
       border-radius: 0;
       padding: 10px;
@@ -473,6 +473,77 @@
       color: #ffeeba;
     }
     
+    /* Estilos para las preguntas frecuentes */
+    .faq-item {
+      margin-bottom: 10px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+    }
+    
+    body.dark .faq-item {
+      border-color: #444;
+    }
+    
+    .faq-question {
+      width: 100%;
+      padding: 12px 15px;
+      text-align: left;
+      background-color: var(--terciario);
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+    
+    body.dark .faq-question {
+      background-color: #3a3a3a;
+    }
+    
+    .faq-question:hover {
+      background-color: #d0d8e0;
+    }
+    
+    body.dark .faq-question:hover {
+      background-color: #4a4a4a;
+    }
+    
+    .faq-question::after {
+      content: '+';
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+    
+    .faq-question.active::after {
+      content: '-';
+    }
+    
+    .faq-answer {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease;
+      background-color: white;
+    }
+    
+    body.dark .faq-answer {
+      background-color: #1e1e1e;
+    }
+    
+    .faq-answer.show {
+      padding: 15px;
+      max-height: 1000px;
+    }
+    
+    .faq-answer p {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    
     /* Responsive para pantallas más grandes */
     @media (min-width: 768px) {
       .calculadora-grid {
@@ -497,8 +568,8 @@
       }
       
       .executive-logo {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
         padding-bottom: 15px;
@@ -719,6 +790,68 @@
     </div>
   </div>
 
+  <!-- Sección de Preguntas Frecuentes -->
+  <div class="faq-section" style="margin-top: 40px; margin-bottom: 60px;">
+    <div class="input-card">
+      <h3><i class="fas fa-question-circle"></i> Preguntas frecuentes</h3>
+      
+      <!-- Pregunta 1 -->
+      <div class="faq-item">
+        <button class="faq-question">¿Qué es y cómo funciona la frecuencia anual de interés?</button>
+        <div class="faq-answer">
+          <p>La frecuencia anual de interés determina con qué frecuencia se capitalizan los intereses en tu inversión. Cuanto más frecuente sea la capitalización (mensual vs anual, por ejemplo), mayor será el rendimiento debido al efecto del interés compuesto.</p>
+        </div>
+      </div>
+      
+      <!-- Pregunta 2 -->
+      <div class="faq-item">
+        <button class="faq-question">¿Cómo funcionan las aportaciones adicionales?</button>
+        <div class="faq-answer">
+          <p>Son depósitos adicionales a lo que invertiste inicialmente, la frecuencia del depósito es la misma que la que definas en "Frecuencia anual de interés compuesto". Por ejemplo, si tus depósitos adicionales son de $100 entonces:</p>
+          
+          <div class="table-wrapper" style="margin-top: 15px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr>
+                  <th style="padding: 10px; background-color: var(--primario); color: white; text-align: left;">Tipo de interés</th>
+                  <th style="padding: 10px; background-color: var(--primario); color: white; text-align: left;">Tiempo</th>
+                  <th style="padding: 10px; background-color: var(--primario); color: white; text-align: left;">Total depositado al año</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Anual</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés una vez al año.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">1 X 100 = $100 anuales</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Mensual</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada mes.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">12 X 100 = $1,200 anuales</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Quincenal</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada quince días.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">24 X 100 = $2,400 anuales</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Semanal</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada 7 días.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">52 X 100 = $5,200 anuales</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Diario</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">Genera interés cada día.</td>
+                  <td style="padding: 8px; border-bottom: 1px solid #ddd;">365 X 100 = $36,500 anuales</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Botón flotante de WhatsApp -->
   <a href="https://wa.me/523318853923?text=Hola,%20me%20interesa%20saber%20más%20sobre%20inversiones%20💰📈" class="whatsapp-btn" target="_blank" title="Contactar por WhatsApp">
     <i class="fab fa-whatsapp"></i>
@@ -770,6 +903,26 @@
         </div>`;
         
         calcular();
+      });
+
+      // Funcionalidad para desplegar las respuestas de FAQ
+      document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+          const faqItem = button.parentElement;
+          const answer = button.nextElementSibling;
+          
+          // Cerrar otros items abiertos
+          document.querySelectorAll('.faq-answer').forEach(item => {
+            if (item !== answer && item.classList.contains('show')) {
+              item.classList.remove('show');
+              item.previousElementSibling.classList.remove('active');
+            }
+          });
+          
+          // Alternar el actual
+          button.classList.toggle('active');
+          answer.classList.toggle('show');
+        });
       });
 
       // Calcular inicialmente
