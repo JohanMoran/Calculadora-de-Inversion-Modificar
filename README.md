@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -293,12 +294,12 @@
       }
       
       .calculadora-grid {
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns: 1.1fr 2fr;
         gap: 15px;
       }
       
       .input-section {
-        max-width: 300px;
+        min-width: 380px;
       }
       
       .chart-container {
@@ -354,11 +355,11 @@
     /* Estilos para pantallas muy grandes */
     @media (min-width: 992px) {
       .calculadora-grid {
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: 1.2fr 3fr;
       }
       
       .input-section {
-        max-width: 320px;
+        min-width: 400px;
       }
       
       .chart-container {
@@ -662,10 +663,22 @@
           totalInteres += interesPeriodo;
           
           // Aportaciones anuales según frecuencia
-          for (let a = 0; a < aportacionesPorAnio; a++) {
-            capital += aportacionPeriodica;
-            aportacionPeriodo += aportacionPeriodica;
+          // CORRECCIÓN: Ahora calcula correctamente las aportaciones mensuales en periodo anual
+          if (frecuenciaAportacion === 12) {
+            // Aportaciones mensuales: sumamos 12 aportaciones al año
+            aportacionPeriodo = aportacionPeriodica * 12;
+          } else if (frecuenciaAportacion === 4) {
+            // Aportaciones trimestrales: sumamos 4 aportaciones al año
+            aportacionPeriodo = aportacionPeriodica * 4;
+          } else if (frecuenciaAportacion === 2) {
+            // Aportaciones semestrales: sumamos 2 aportaciones al año
+            aportacionPeriodo = aportacionPeriodica * 2;
+          } else {
+            // Aportaciones anuales: solo una aportación
+            aportacionPeriodo = aportacionPeriodica;
           }
+          
+          capital += aportacionPeriodo;
           totalAportaciones += aportacionPeriodo;
         }
 
