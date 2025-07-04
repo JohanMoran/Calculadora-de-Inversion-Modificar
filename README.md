@@ -26,27 +26,18 @@
         --terciario: #5a6d80;
       }
   
-     body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: var(--fondo-claro);
-  color: var(--texto-claro);
-  padding: 10px;
-  margin: 0 auto;
-  transition: background-color 0.4s, color 0.4s;
-  font-size: 14px;
-  line-height: 1.4;
-  -webkit-text-size-adjust: 100%;
-  width: 100%;
-  max-width: 900px; /* Ajuste principal */
-}
-
-/* Ancho aún más reducido para móviles */
-@media (max-width: 600px) {
-  body {
-    max-width: 95%;
-    padding: 8px;
-  }
-}``
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: var(--fondo-claro);
+        color: var(--texto-claro);
+        padding: 10px;
+        max-width: 1200px;
+        margin: 0 auto;
+        transition: background-color 0.4s, color 0.4s;
+        font-size: 14px;
+        line-height: 1.4;
+        -webkit-text-size-adjust: 100%;
+      }
   
       /* Header modificado */
       .mobile-header {
