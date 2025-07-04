@@ -59,7 +59,7 @@
     .logo-executive-container {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 20px;
     }
     
     .executive-logo {
@@ -568,8 +568,8 @@
       }
       
       .executive-logo {
-        width: 200px;  /* Tamaño aumentado para móvil */
-        height: 200px; /* Tamaño aumentado para móvil */
+        width: 120px;  /* Tamaño aumentado para móvil */
+        height: 120px; /* Tamaño aumentado para móvil */
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
         padding-bottom: 15px;
@@ -610,15 +610,10 @@
 
   <!-- Header ejecutivo con logo más grande -->
   <div class="executive-header">
-    <div class="logo-executive-container">
-      <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="executive-logo">
-      <div class="header-titles">
-        <h1>Calculadora de Interés Compuesto</h1>
-        <p class="subtitle">Herramienta profesional de proyección financiera</p>
-      </div>
-    </div>
+  <div class="logo-executive-container">
+    <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="executive-logo">
   </div>
-
+</div>
   <div class="calculadora-grid">
     <!-- Columna izquierda - Inputs -->
     <div class="input-section">
