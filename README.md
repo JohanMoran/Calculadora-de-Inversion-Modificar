@@ -1334,213 +1334,232 @@
     }
 
     // Función para exportar a PDF
-    async function exportToPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
+async function exportToPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
 
-      // Estilos para el PDF
-      const primaryColor = '#2b6777';
-      const secondaryColor = '#52ab98';
-      const textColor = '#333333';
-      
-      // Margenes
-      const marginLeft = 15;
-      const marginRight = 15;
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const contentWidth = pageWidth - marginLeft - marginRight;
-      
-      // 1. Título del reporte
-      doc.setFontSize(18);
-      doc.setTextColor(primaryColor);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Reporte de Inversión - Interés Compuesto', pageWidth / 2, 20, { align: 'center' });
-      
-      // 2. Fecha de generación
-      doc.setFontSize(10);
-      doc.setTextColor(100);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Generado el: ${new Date().toLocaleDateString()}`, pageWidth / 2, 27, { align: 'center' });
-      
-      // 3. Sección de Resumen (idéntico al de la página)
-      doc.setFontSize(14);
-      doc.setTextColor(primaryColor);
-      doc.text('Resumen de la Inversión', marginLeft, 40);
-      
-      doc.setDrawColor(primaryColor);
-      doc.setLineWidth(0.5);
-      doc.line(marginLeft, 42, 60, 42);
+  // Configuración de estilos
+  const primaryColor = '#2b6777';
+  const secondaryColor = '#52ab98';
+  const accentColor = '#28a745';
+  const textColor = '#333333';
+  const lightGray = '#f5f5f5';
+  
+  // Margenes y dimensiones
+  const margin = 15;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const contentWidth = pageWidth - margin * 2;
+  let yPosition = margin;
 
-      // Datos resumen en formato idéntico al de la página
-      const summaryData = [
-        { 
-          icon: '💰',
-          label: 'Depósito Inicial', 
-          value: document.getElementById('res-inicial').textContent,
-          color: primaryColor,
-          borderColor: primaryColor
-        },
-        { 
-          icon: '💵',
-          label: 'Depósitos Adicionales', 
-          value: document.getElementById('res-aportaciones').textContent,
-          color: primaryColor,
-          borderColor: primaryColor
-        },
-        { 
-          icon: '📈',
-          label: 'Intereses Acumulados', 
-          value: document.getElementById('res-intereses').textContent,
-          color: primaryColor,
-          borderColor: primaryColor
-        },
-        { 
-          icon: '🏦',
-          label: 'Total Acumulado', 
-          value: document.getElementById('res-total').textContent,
-          color: '#28a745',
-          borderColor: '#28a745'
-        }
-      ];
-      
-      let yPosition = 50;
-      const boxHeight = 20;
-      const boxWidth = contentWidth / 2 - 5;
-      
-      summaryData.forEach((item, i) => {
-        const xPosition = marginLeft + (i % 2 === 0 ? 0 : boxWidth + 10);
-        
-        if (i % 2 === 0 && i > 0) {
-          yPosition += boxHeight + 10;
-        }
-        
-        // Dibujar caja
-        doc.setFillColor(255, 255, 255);
-        doc.setDrawColor(200, 200, 200);
-        doc.roundedRect(
-          xPosition, 
-          yPosition, 
-          boxWidth, 
-          boxHeight, 
-          3, 3, 'FD'
-        );
-        
-        // Borde izquierdo de color
-        doc.setFillColor(item.borderColor);
-        doc.rect(
-          xPosition, 
-          yPosition, 
-          4, 
-          boxHeight, 
-          'F'
-        );
-        
-        // Icono
-        doc.setFontSize(12);
-        doc.setTextColor(item.color);
-        doc.text(
-          item.icon,
-          xPosition + 10, 
-          yPosition + 12
-        );
-        
-        // Texto
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text(
-          item.label, 
-          xPosition + 25, 
-          yPosition + 8
-        );
-        
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(textColor);
-        if (item.label === 'Total Acumulado') {
-          doc.setTextColor('#28a745');
-        }
-        doc.text(
-          item.value, 
-          xPosition + 25, 
-          yPosition + 15
-        );
-      });
-      
-      yPosition += boxHeight + 20;
-      
-      // 4. Tabla de detalle de crecimiento
-      doc.setFontSize(14);
-      doc.setTextColor(primaryColor);
-      doc.text('Detalle de Crecimiento', pageWidth / 2, yPosition, { align: 'center' });
-      yPosition += 10;
-      
-      // Preparar datos de la tabla
-      const tableData = [];
-      const rows = document.querySelectorAll('#tablaResultados tbody tr');
-      
-      rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        tableData.push([
-          cells[0].textContent.trim(),
-          cells[1].textContent.trim(),
-          cells[2].textContent.trim(),
-          cells[3].textContent.trim(),
-          cells[4].textContent.trim()
-        ]);
-      });
-      
-      // Encabezados de la tabla
-      const headers = [
-        'Periodo',
-        'Depósito Inicial',
-        'Aportaciones',
-        'Intereses',
-        'Total Acumulado'
-      ];
-      
-      // Estilo de la tabla
-      doc.autoTable({
-        head: [headers],
-        body: tableData,
-        startY: yPosition,
-        theme: 'grid',
-        headStyles: {
-          fillColor: primaryColor,
-          textColor: 255,
-          fontStyle: 'bold'
-        },
-        alternateRowStyles: {
-          fillColor: [242, 242, 242]
-        },
-        columnStyles: {
-          0: { cellWidth: 'auto', halign: 'center' },
-          1: { cellWidth: 'auto', halign: 'right' },
-          2: { cellWidth: 'auto', halign: 'right' },
-          3: { cellWidth: 'auto', halign: 'right' },
-          4: { cellWidth: 'auto', halign: 'right', fontStyle: 'bold' }
-        },
-        margin: { left: marginLeft, right: marginRight },
-        tableWidth: contentWidth,
-        pageBreak: 'auto',
-        styles: {
-          fontSize: 8, // Tamaño de fuente más pequeño para que quepa más información
-          cellPadding: 2 // Padding reducido
-        }
-      });
-      
-      // Pie de página
-      const finalY = doc.lastAutoTable.finalY || yPosition;
-      doc.setFontSize(10);
-      doc.setTextColor(100);
-      doc.text('Calculadora de Interés Compuesto - Herramienta profesional de proyección financiera', 
-        pageWidth / 2, finalY + 10, { align: 'center' });
-      
-      doc.save('Reporte_Inversion.pdf');
+  // 1. Encabezado del reporte
+  doc.setFontSize(18);
+  doc.setTextColor(primaryColor);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Reporte de Proyección Financiera', pageWidth / 2, yPosition, { align: 'center' });
+  
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.setFont('helvetica', 'normal');
+  yPosition += 8;
+  doc.text(`Generado el: ${new Date().toLocaleDateString('es-MX', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })}`, pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 15;
+
+  // 2. Resumen Ejecutivo (4 cuadros en 2 filas)
+  doc.setFontSize(14);
+  doc.setTextColor(primaryColor);
+  doc.text('Resumen Ejecutivo', margin, yPosition);
+  doc.setDrawColor(primaryColor);
+  doc.setLineWidth(0.3);
+  doc.line(margin, yPosition + 2, margin + 40, yPosition + 2);
+  
+  yPosition += 10;
+
+  const summaryData = [
+    { 
+      icon: '💰',
+      label: 'Inversión Inicial', 
+      value: document.getElementById('res-inicial').textContent,
+      color: primaryColor
+    },
+    { 
+      icon: '📥',
+      label: 'Aportaciones', 
+      value: document.getElementById('res-aportaciones').textContent,
+      color: secondaryColor
+    },
+    { 
+      icon: '📈',
+      label: 'Intereses', 
+      value: document.getElementById('res-intereses').textContent,
+      color: '#6c757d'
+    },
+    { 
+      icon: '🏦',
+      label: 'Total Final', 
+      value: document.getElementById('res-total').textContent,
+      color: accentColor
     }
+  ];
 
+  // Diseño de 2x2 para los cuadros de resumen
+  const boxWidth = contentWidth / 2 - 5;
+  const boxHeight = 20;
+  
+  summaryData.forEach((item, i) => {
+    const xPosition = margin + (i % 2 === 0 ? 0 : boxWidth + 10);
+    const currentY = yPosition + (i > 1 ? boxHeight + 10 : 0);
+    
+    // Fondo del cuadro
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(220, 220, 220);
+    doc.roundedRect(xPosition, currentY, boxWidth, boxHeight, 2, 2, 'FD');
+    
+    // Borde izquierdo de color
+    doc.setFillColor(item.color);
+    doc.rect(xPosition, currentY, 4, boxHeight, 'F');
+    
+    // Icono
+    doc.setFontSize(12);
+    doc.setTextColor(item.color);
+    doc.text(item.icon, xPosition + 8, currentY + 12);
+    
+    // Texto
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.text(item.label, xPosition + 20, currentY + 8);
+    
+    // Valor
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(textColor);
+    if (item.label === 'Total Final') doc.setTextColor(accentColor);
+    doc.text(item.value, xPosition + 20, currentY + 15);
+  });
+
+  yPosition += boxHeight * 2 + 15;
+
+  // 3. Gráfico de la inversión (capturamos el canvas como imagen)
+  doc.setFontSize(14);
+  doc.setTextColor(primaryColor);
+  doc.text('Progresión de la Inversión', margin, yPosition);
+  doc.setDrawColor(primaryColor);
+  doc.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+  
+  yPosition += 10;
+
+  try {
+    const canvas = document.getElementById('graficaBarras');
+    const canvasImage = await html2canvas(canvas, {
+      scale: 2,
+      logging: false,
+      useCORS: true,
+      allowTaint: true
+    });
+
+    const imgData = canvasImage.toDataURL('image/png');
+    const imgProps = doc.getImageProperties(imgData);
+    const imgWidth = contentWidth;
+    const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+    
+    // Ajustamos altura máxima para el gráfico
+    const maxChartHeight = 80;
+    const finalHeight = imgHeight > maxChartHeight ? maxChartHeight : imgHeight;
+    
+    doc.addImage(imgData, 'PNG', margin, yPosition, imgWidth, finalHeight);
+    yPosition += finalHeight + 10;
+  } catch (error) {
+    console.error("Error al generar gráfico:", error);
+    doc.setFontSize(10);
+    doc.setTextColor('#dc3545');
+    doc.text('No se pudo incluir el gráfico en el reporte', margin, yPosition);
+    yPosition += 10;
+  }
+
+  // 4. Detalle de crecimiento (tabla)
+  doc.setFontSize(14);
+  doc.setTextColor(primaryColor);
+  doc.text('Detalle por Periodos', margin, yPosition);
+  doc.setDrawColor(primaryColor);
+  doc.line(margin, yPosition + 2, margin + 40, yPosition + 2);
+  
+  yPosition += 10;
+
+  // Preparamos datos para la tabla
+  const tableData = [];
+  const headers = ['Periodo', 'Inicial', 'Aportaciones', 'Intereses', 'Total'];
+  const rows = document.querySelectorAll('#tablaResultados tbody tr');
+  
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    tableData.push([
+      cells[0].textContent.trim(),
+      cells[1].textContent.trim(),
+      cells[2].textContent.trim(),
+      cells[3].textContent.trim(),
+      cells[4].textContent.trim()
+    ]);
+  });
+
+  // Estilo de tabla profesional
+  doc.autoTable({
+    head: [headers],
+    body: tableData,
+    startY: yPosition,
+    theme: 'grid',
+    headStyles: {
+      fillColor: primaryColor,
+      textColor: 255,
+      fontStyle: 'bold',
+      fontSize: 9
+    },
+    bodyStyles: {
+      fontSize: 8,
+      cellPadding: 2
+    },
+    alternateRowStyles: {
+      fillColor: lightGray
+    },
+    columnStyles: {
+      0: { cellWidth: 'auto', halign: 'center' },
+      1: { cellWidth: 'auto', halign: 'right' },
+      2: { cellWidth: 'auto', halign: 'right' },
+      3: { cellWidth: 'auto', halign: 'right' },
+      4: { cellWidth: 'auto', halign: 'right', fontStyle: 'bold' }
+    },
+    margin: { left: margin, right: margin },
+    tableWidth: contentWidth,
+    styles: {
+      overflow: 'linebreak',
+      lineWidth: 0.1,
+      lineColor: 200
+    },
+    didDrawPage: function(data) {
+      // Footer en cada página
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.text(
+        'Calculadora de Interés Compuesto - Herramienta profesional de proyección financiera',
+        pageWidth / 2,
+        doc.internal.pageSize.getHeight() - 10,
+        { align: 'center' }
+      );
+    }
+  });
+
+  // Guardar el PDF
+  doc.save(`Reporte_Financiero_${new Date().toISOString().slice(0,10)}.pdf`);
+}
     // Función para exportar a Excel
     function exportToExcel() {
       // Preparar datos
