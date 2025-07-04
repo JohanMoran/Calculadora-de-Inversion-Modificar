@@ -1,8 +1,7 @@
-  <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Calculadora de Interés Compuesto</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -28,96 +27,52 @@
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--fondo-claro);
       color: var(--texto-claro);
       padding: 10px;
-      width: 100%;
-      min-width: 320px;
       margin: 0 auto;
+      max-width: 100%;
+      min-width: 320px;
       transition: background-color 0.4s, color 0.4s;
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 15px;
+      line-height: 1.5;
       -webkit-text-size-adjust: 100%;
-      overflow-x: hidden;
     }
 
-    /* Header mejorado con logo grande */
+    /* Header optimizado para móviles */
     .mobile-header {
       text-align: center;
-      margin-bottom: 30px;
-      padding: 15px 0;
-      background-color: var(--primario);
-      border-radius: 10px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      margin: 0 auto 20px;
+      padding: 10px 5px;
+      max-width: 100%;
     }
     
     .mobile-header img {
-      max-width: 320px;
-      width: 80%;
+      max-width: 280px;
+      width: 100%;
       height: auto;
-      padding: 10px;
       object-fit: contain;
-      transition: transform 0.3s ease;
     }
 
-    .mobile-header img:hover {
-      transform: scale(1.02);
-    }
-
-    /* Tooltips */
-    .tooltip-container {
-      position: relative;
-      display: inline-block;
-      margin-left: 5px;
-    }
-    
-    .tooltip-icon {
-      color: var(--primario);
-      cursor: help;
-      font-size: 0.9rem;
-    }
-    
-    .tooltip-text {
-      visibility: hidden;
-      width: 200px;
-      background-color: var(--primario);
-      color: white;
-      text-align: center;
-      border-radius: 6px;
-      padding: 8px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-      transition: opacity 0.3s;
-      font-size: 0.8rem;
-      font-weight: normal;
-      font-style: normal;
-    }
-    
-    .tooltip-container:hover .tooltip-text {
-      visibility: visible;
-      opacity: 1;
-    }
-
+    /* Contenedor principal flexible */
     .calculadora-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 5px;
+      gap: 15px;
       width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
       box-sizing: border-box;
     }
 
+    /* Tarjetas adaptables */
     .input-card, .result-card {
       background: white;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       width: 100%;
       box-sizing: border-box;
     }
@@ -127,45 +82,43 @@
     body.dark .chart-container,
     body.dark .table-wrapper {
       background: #1e1e1e;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
+    /* Textos optimizados para móviles */
     .input-card h3, .result-card h3 {
-      margin-top: 0;
+      margin: 0 0 15px 0;
       color: var(--primario);
-      padding-bottom: 6px;
-      margin-bottom: 12px;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .input-card h3 i {
-      font-size: 1rem;
+      flex-wrap: wrap;
+      gap: 8px;
+      line-height: 1.4;
     }
 
     .input-group {
-      margin-bottom: 12px;
+      margin-bottom: 15px;
     }
 
     .input-group label {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
 
+    /* Inputs optimizados para móviles */
     input, select {
       width: 100%;
       padding: 12px 15px;
       border: 1px solid #ddd;
-      border-radius: 6px;
+      border-radius: 8px;
       background-color: #fff;
-      transition: all 0.3s;
-      font-size: 16px;
-      -webkit-appearance: none;
+      font-size: 1rem;
       box-sizing: border-box;
+      -webkit-appearance: none;
     }
 
     body.dark input,
@@ -175,33 +128,31 @@
       border-color: #555;
     }
 
+    /* Resultados mejor organizados */
     .result-row {
       display: flex;
       justify-content: space-between;
-      margin: 10px 0;
-      font-size: 0.9rem;
+      margin: 12px 0;
+      font-size: 0.95rem;
     }
 
     .result-row.total {
       font-weight: bold;
       border-top: 1px solid #eee;
-      padding-top: 10px;
+      padding-top: 12px;
       color: var(--primario);
-      font-size: 0.95rem;
-      margin-top: 12px;
+      font-size: 1rem;
+      margin-top: 15px;
     }
 
-    body.dark .result-row.total {
-      border-color: #444;
-    }
-
+    /* Gráfico responsive */
     .chart-container {
       background: white;
-      padding: 12px;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       height: 300px;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       width: 100%;
     }
 
@@ -210,22 +161,53 @@
       height: 100% !important;
     }
 
+    /* Tabla optimizada para móviles */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    
+    #tablaResultados {
+      width: 100%;
+      min-width: 500px;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    
+    #tablaResultados th, 
+    #tablaResultados td {
+      padding: 10px 12px;
+      text-align: right;
+      border-bottom: 1px solid #eee;
+    }
+    
+    #tablaResultados th {
+      background-color: var(--primario);
+      color: white;
+      position: sticky;
+      top: 0;
+      font-size: 0.9rem;
+    }
+
+    /* Botones flotantes optimizados */
     .dark-mode-btn {
       position: fixed;
-      top: 10px;
-      right: 10px;
+      top: 15px;
+      right: 15px;
       z-index: 999;
       background-color: var(--primario);
       color: white;
       border: none;
       padding: 10px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      font-size: 16px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
 
     .whatsapp-btn {
@@ -241,214 +223,128 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transition: all 0.3s;
-    }
-
-    .whatsapp-btn:hover {
-      background-color: #128C7E;
-      transform: scale(1.1);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.2);
     }
 
     .whatsapp-btn i {
-      font-size: 28px;
+      font-size: 26px;
     }
 
-    .results-table-container {
-      margin-top: 12px;
-      width: 100%;
+    /* Tooltips mejorados */
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
     }
     
-    .table-wrapper {
-      overflow-x: auto;
-      max-height: 250px;
-      overflow-y: auto;
-      margin-top: 12px;
-      border-radius: 6px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-      -webkit-overflow-scrolling: touch;
-      width: 100%;
-      display: block;
+    .tooltip-icon {
+      color: var(--primario);
+      cursor: help;
+      font-size: 0.95rem;
+      margin-left: 5px;
     }
     
-    #tablaResultados {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      min-width: 500px;
-    }
-    
-    #tablaResultados th, 
-    #tablaResultados td {
-      padding: 8px 10px;
-      text-align: right;
-      border-bottom: 1px solid #eee;
-    }
-    
-    #tablaResultados th {
+    .tooltip-text {
+      visibility: hidden;
+      width: 220px;
       background-color: var(--primario);
       color: white;
-      position: sticky;
-      top: 0;
       text-align: center;
+      border-radius: 8px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
       font-size: 0.85rem;
+      font-weight: normal;
     }
     
-    #tablaResultados tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    
-    #tablaResultados tr:hover {
-      background-color: #f1f1f1;
-    }
-    
-    body.dark #tablaResultados th {
-      background-color: var(--secundario);
-    }
-    
-    body.dark #tablaResultados tr:nth-child(even) {
-      background-color: #2a2a2a;
-    }
-    
-    body.dark #tablaResultados tr:hover {
-      background-color: #333;
-    }
-    
-    body.dark #tablaResultados th, 
-    body.dark #tablaResultados td {
-      border-color: #444;
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
     }
 
-    /* Estilos para pantallas más grandes */
-    @media (min-width: 768px) {
+    /* Media Queries para ajustes específicos */
+    @media (max-width: 480px) {
       body {
-        padding: 15px;
-        font-size: 15px;
+        padding: 8px;
+        font-size: 14px;
+      }
+      
+      .mobile-header img {
+        max-width: 240px;
+      }
+      
+      .input-card, .result-card {
+        padding: 12px;
+      }
+      
+      .input-card h3, .result-card h3 {
+        font-size: 1.1rem;
+      }
+      
+      input, select {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+      }
+      
+      .result-row {
+        font-size: 0.9rem;
+      }
+      
+      .dark-mode-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+      
+      .whatsapp-btn {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .whatsapp-btn i {
+        font-size: 24px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .calculadora-grid {
+        grid-template-columns: 1.1fr 2fr;
+        gap: 20px;
+      }
+      
+      .mobile-header img {
+        max-width: 320px;
+      }
+      
+      .chart-container {
+        height: 350px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      body {
+        max-width: 1200px;
+        padding: 20px;
       }
       
       .calculadora-grid {
-        grid-template-columns: 1.1fr 2fr;
-        gap: 15px;
+        grid-template-columns: 1.2fr 2.8fr;
       }
       
-      .input-section {
-        min-width: 380px;
+      .mobile-header img {
+        max-width: 350px;
       }
       
       .chart-container {
         height: 400px;
       }
-      
-      .dark-mode-btn {
-        top: 15px;
-        right: 15px;
-        padding: 12px 18px;
-        font-size: 16px;
-      }
-      
-      .whatsapp-btn {
-        width: 60px;
-        height: 60px;
-        bottom: 25px;
-        right: 25px;
-      }
-      
-      .whatsapp-btn i {
-        font-size: 30px;
-      }
-      
-      .mobile-header {
-        margin-bottom: 40px;
-      }
-      
-      .mobile-header img {
-        max-width: 400px;
-        width: 70%;
-      }
-      
-      .input-card, .result-card {
-        padding: 15px;
-      }
-      
-      .input-card h3, .result-card h3 {
-        font-size: 1.15rem;
-      }
-      
-      .result-row {
-        font-size: 0.95rem;
-      }
-      
-      #tablaResultados {
-        font-size: 0.85rem;
-      }
-      
-      .tooltip-text {
-        width: 250px;
-        font-size: 0.9rem;
-      }
     }
 
-    /* Estilos para pantallas muy grandes */
-    @media (min-width: 992px) {
-      .calculadora-grid {
-        grid-template-columns: 1.2fr 3fr;
-      }
-      
-      .input-section {
-        min-width: 400px;
-      }
-      
-      .chart-container {
-        height: 450px;
-      }
-      
-      .mobile-header img {
-        max-width: 450px;
-      }
-    }
-
-    /* Ajustes para móviles pequeños */
-    @media (max-width: 480px) {
-      body {
-        padding: 8px;
-        font-size: 15px;
-      }
-      
-      .input-card, .result-card {
-        padding: 10px;
-      }
-      
-      input, select {
-        padding: 10px 12px;
-        font-size: 15px;
-      }
-      
-      .dark-mode-btn {
-        padding: 8px 12px;
-        font-size: 14px;
-      }
-      
-      .mobile-header img {
-        max-width: 280px;
-      }
-    }
-
-    /* Ajustes para móviles muy pequeños */
-    @media (max-width: 375px) {
-      .input-card h3, .result-card h3 {
-        font-size: 1rem;
-      }
-      
-      .result-row {
-        font-size: 0.85rem;
-      }
-      
-      .mobile-header img {
-        max-width: 250px;
-      }
-    }
-
-    /* Mejoras para inputs en móviles */
+    /* Mejoras de interacción */
     input, select, button {
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
@@ -457,7 +353,7 @@
     select {
       background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
       background-repeat: no-repeat;
-      background-position: right 10px center;
+      background-position: right 12px center;
       background-size: 1em;
     }
     
@@ -469,7 +365,6 @@
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Modo Oscuro</button>
 
-  <!-- Header con logo grande -->
   <div class="mobile-header">
     <img src="Johan_Moran.PNG" alt="Logo Johan Moran">
   </div>
@@ -596,7 +491,6 @@
         <canvas id="graficaBarras"></canvas>
       </div>
       
-      <!-- Tabla de resultados detallados -->
       <div class="results-table-container">
         <div class="input-card">
           <h3><i class="fas fa-table"></i> Detalle de crecimiento</h3>
@@ -621,26 +515,21 @@
     </div>
   </div>
 
-  <!-- Botón flotante de WhatsApp -->
   <a href="https://wa.me/523318853923?text=Hola,%20me%20interesa%20saber%20más%20sobre%20inversiones%20💰📈" class="whatsapp-btn" target="_blank" title="Contactar por WhatsApp">
     <i class="fab fa-whatsapp"></i>
   </a>
 
   <script>
-    // Variables globales
     let chartBarras = null;
     let totalAportaciones = 0;
     let totalInteres = 0;
     let capital = 0;
 
-    // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
-      // Configura eventos de input para cálculo automático
       document.querySelectorAll('input, select').forEach(input => {
         input.addEventListener('input', calcular);
       });
 
-      // Configura formateo de moneda
       document.getElementById('capitalInicial').addEventListener('input', function() {
         formatearMoneda(this);
       });
@@ -649,7 +538,6 @@
         formatearMoneda(this);
       });
 
-      // Cambiar label de plazo según selección
       document.getElementById('tipoPlazo').addEventListener('change', function() {
         const labelPlazo = document.getElementById('labelPlazo');
         const tooltip = labelPlazo.querySelector('.tooltip-text');
@@ -664,7 +552,6 @@
           document.getElementById('plazo').placeholder = '0';
         }
         
-        // Asegurarse de mantener el icono de tooltip
         labelPlazo.innerHTML = labelPlazo.textContent + `<div class="tooltip-container">
           <i class="fas fa-question-circle tooltip-icon"></i>
           <span class="tooltip-text">${tooltip.textContent}</span>
@@ -673,7 +560,6 @@
         calcular();
       });
 
-      // Calcular inicialmente
       calcular();
     });
 
@@ -693,35 +579,26 @@
     }
 
     function formatearMoneda(input) {
-      // Guardar posición del cursor
       const cursorPosition = input.selectionStart;
-      
-      // Eliminar todos los caracteres no numéricos excepto el punto decimal
       let valor = input.value.replace(/[^0-9.]/g, '');
       
-      // Si está vacío, dejar vacío
       if(valor === '') {
         input.value = '';
         return;
       }
       
-      // Convertir a número y formatear
       const numero = parseFloat(valor);
       if (isNaN(numero)) {
         input.value = '';
         return;
       }
       
-      // Formatear con $ y separadores de miles
       input.value = '$' + new Intl.NumberFormat('es-MX').format(numero);
-      
-      // Restaurar posición del cursor, ajustando por los caracteres añadidos
       const newCursorPosition = cursorPosition + (input.value.length - valor.length);
       input.setSelectionRange(newCursorPosition, newCursorPosition);
     }
 
     function calcular() {
-      // Obtener valores de los inputs
       const capitalInicial = parseFloat(document.getElementById('capitalInicial').value.replace(/[^0-9.]/g, '')) || 0;
       const tasaAnual = parseFloat(document.getElementById('tasa').value) || 0;
       const tipoPlazo = document.getElementById('tipoPlazo').value;
@@ -730,16 +607,11 @@
       const aportacion = parseFloat(document.getElementById('aportacion').value.replace(/[^0-9.]/g, '')) || 0;
       const frecuenciaAportacion = parseInt(document.getElementById('frecuenciaAportacion').value) || 12;
 
-      // Validaciones básicas
-      if (plazo <= 0 || tasaAnual <= 0) {
-        return;
-      }
+      if (plazo <= 0 || tasaAnual <= 0) return;
 
-      // Convertir plazo a años si está en meses
       const plazoAnios = tipoPlazo === 'mensual' ? plazo / 12 : plazo;
       const totalMeses = tipoPlazo === 'mensual' ? plazo : plazo * 12;
 
-      // Calcular valores
       const resultados = [];
       capital = capitalInicial;
       totalAportaciones = 0;
@@ -748,11 +620,7 @@
       const tasaPeriodica = tasaAnual / 100 / frecuencia;
       const aportacionPeriodica = aportacion;
       const aportacionesPorAnio = 12 / frecuenciaAportacion;
-      const totalAportacionesPeriodos = tipoPlazo === 'mensual' ? 
-        (plazo / (12 / frecuenciaAportacion)) : 
-        (plazo * aportacionesPorAnio);
 
-      // Calcular por periodo (mes o año según selección)
       const periodos = tipoPlazo === 'mensual' ? totalMeses : plazo;
       const labels = tipoPlazo === 'mensual' ? 
         Array.from({length: periodos}, (_, i) => `Mes ${i+1}`) : 
@@ -762,23 +630,17 @@
         let interesPeriodo = 0;
         let aportacionPeriodo = 0;
         
-        // Si es cálculo mensual
         if (tipoPlazo === 'mensual') {
-          // Calcular interés mensual (dividimos la tasa anual entre 12)
           interesPeriodo = capital * (tasaAnual / 100 / 12);
           capital += interesPeriodo;
           totalInteres += interesPeriodo;
           
-          // Aportaciones según frecuencia
           if (i % (12 / frecuenciaAportacion) === 0 || frecuenciaAportacion === 12) {
             capital += aportacionPeriodica;
             aportacionPeriodo = aportacionPeriodica;
             totalAportaciones += aportacionPeriodica;
           }
-        } 
-        // Si es cálculo anual
-        else {
-          // Calcular interés anual compuesto
+        } else {
           for (let p = 0; p < frecuencia; p++) {
             const interes = capital * tasaPeriodica;
             capital += interes;
@@ -786,18 +648,13 @@
           }
           totalInteres += interesPeriodo;
           
-          // Aportaciones anuales según frecuencia
           if (frecuenciaAportacion === 12) {
-            // Aportaciones mensuales: sumamos 12 aportaciones al año
             aportacionPeriodo = aportacionPeriodica * 12;
           } else if (frecuenciaAportacion === 4) {
-            // Aportaciones trimestrales: sumamos 4 aportaciones al año
             aportacionPeriodo = aportacionPeriodica * 4;
           } else if (frecuenciaAportacion === 2) {
-            // Aportaciones semestrales: sumamos 2 aportaciones al año
             aportacionPeriodo = aportacionPeriodica * 2;
           } else {
-            // Aportaciones anuales: solo una aportación
             aportacionPeriodo = aportacionPeriodica;
           }
           
@@ -814,13 +671,11 @@
         });
       }
 
-      // Actualizar resumen
       document.getElementById('res-inicial').textContent = formatCurrency(capitalInicial);
       document.getElementById('res-aportaciones').textContent = formatCurrency(totalAportaciones);
       document.getElementById('res-intereses').textContent = formatCurrency(totalInteres);
       document.getElementById('res-total').textContent = formatCurrency(capital);
 
-      // Generar gráfico y tabla
       generarGraficoBarras(resultados, labels);
       generarTabla(resultados, tipoPlazo === 'mensual');
     }
@@ -832,10 +687,8 @@
         chartBarras.destroy();
       }
       
-      // Preparar datos para el gráfico (modificado para mostrar depósito inicial en todos los periodos)
       const datosInicial = datos.map(() => datos[0].capitalInicial);
       
-      // Calcular valores acumulativos para aportaciones e intereses
       let acumuladoAportaciones = 0;
       let acumuladoIntereses = 0;
       
@@ -886,22 +739,13 @@
           scales: {
             x: {
               stacked: true,
-              grid: {
-                display: false
-              },
-              ticks: {
-                maxRotation: 45,
-                minRotation: 45
-              }
+              grid: { display: false },
+              ticks: { maxRotation: 45, minRotation: 45 }
             },
             y: {
               stacked: true,
-              ticks: {
-                callback: (value) => formatCurrency(value)
-              },
-              grid: {
-                color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)'
-              },
+              ticks: { callback: (value) => formatCurrency(value) },
+              grid: { color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)' },
               beginAtZero: true
             }
           },
@@ -919,25 +763,15 @@
               callbacks: {
                 label: (context) => {
                   let label = context.dataset.label || '';
-                  if (label) {
-                    label += ': ';
-                  }
-                  if (context.parsed.y !== null) {
-                    label += formatCurrency(context.parsed.y);
-                  }
+                  if (label) label += ': ';
+                  if (context.parsed.y !== null) label += formatCurrency(context.parsed.y);
                   return label;
                 },
-                footer: (items) => {
-                  const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
-                  return `Total acumulado: ${formatCurrency(total)}`;
-                }
+                footer: (items) => `Total acumulado: ${formatCurrency(items.reduce((sum, item) => sum + item.parsed.y, 0))}`
               }
             }
           },
-          interaction: {
-            intersect: false,
-            mode: 'index'
-          }
+          interaction: { intersect: false, mode: 'index' }
         }
       });
     }
@@ -946,10 +780,8 @@
       const tbody = document.querySelector('#tablaResultados tbody');
       tbody.innerHTML = '';
       
-      datos.forEach((item, index) => {
+      datos.forEach((item) => {
         const fila = document.createElement('tr');
-        
-        // Formateamos diferente si es mensual o anual
         const periodo = esMensual ? `Mes ${item.periodo}` : `Año ${item.periodo}`;
         
         fila.innerHTML = `
@@ -960,12 +792,8 @@
           <td><strong>${formatCurrency(item.total)}</strong></td>
         `;
         
-        // Destacamos los periodos anuales si es mensual
         if (esMensual && item.periodo % 12 === 0) {
-          fila.style.backgroundColor = 'rgba(82, 171, 152, 0.2)';
-          if (document.body.classList.contains('dark')) {
-            fila.style.backgroundColor = 'rgba(82, 171, 152, 0.3)';
-          }
+          fila.style.backgroundColor = document.body.classList.contains('dark') ? 'rgba(82, 171, 152, 0.3)' : 'rgba(82, 171, 152, 0.2)';
         }
         
         tbody.appendChild(fila);
