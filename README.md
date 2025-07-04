@@ -41,37 +41,53 @@
     }
   
     /* Header ejecutivo - Modificado para logo más grande */
-    .executive-header {
+     .executive-header {
       background-color: #ffffff;
-      padding: 20px 40px;
+      padding: 20px;
       margin-bottom: 30px;
       border-radius: 8px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      border-bottom: 4px solid var(--primario);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: none; /* Eliminamos el borde inferior */
     }
     
     body.dark .executive-header {
       background-color: #1a1a1a;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      border-bottom-color: var(--secundario);
     }
     
-    .logo-executive-container {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
+  .logo-executive-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
     
+  .executive-logo {
+    width: 250px;  /* Tamaño aumentado */
+    height: 250px; /* Tamaño aumentado */
+    object-fit: contain;
+    border-radius: 0;
+    padding: 10px;
+    border: none; /* Eliminamos bordes */
+    margin: 0; /* Eliminamos márgenes */
+  }
+    /* Ajustes para móviles */
+  @media (max-width: 768px) {
     .executive-logo {
-      width: 180px;  /* Tamaño aumentado */
-      height: 180px; /* Tamaño aumentado */
-      object-fit: contain;
-      border-radius: 0;
-      padding: 10px;
-      border-right: 1px solid #e0e0e0;
-      margin-right: 15px; /* Espacio adicional */
+      width: 200px;
+      height: 200px;
     }
-    
+  }
+
+  @media (max-width: 480px) {
+    .executive-logo {
+      width: 180px;
+      height: 180px;
+    }
+  }
     body.dark .executive-logo {
       border-right-color: #444;
     }
