@@ -657,8 +657,8 @@
         <div class="input-group">
           <label for="tipoPlazo">Tipo de plazo:</label>
           <select id="tipoPlazo">
-            <option value="anual">Periodo Anual</option>
-            <option value="mensual">Periodo Mensual</option>
+            <option value="anual">Periodo en Años</option>
+            <option value="mensual">Periodod en Meses</option>
           </select>
         </div>
         <div class="input-group">
@@ -678,10 +678,10 @@
             </div>
           </label>
           <select id="frecuencia">
-            <option value="12" selected>Mensualmente</option>
+            <option value="12" selected>Mensual</option>
             <option value="4">Trimestral</option>
             <option value="2">Semestral</option>
-            <option value="1">Anualmente</option>
+            <option value="1">Anual</option>
           </select>
         </div>
       </div>
@@ -861,7 +861,8 @@
       <div class="faq-item">
         <button class="faq-question">¿Cómo funcionan las aportaciones adicionales?</button>
         <div class="faq-answer">
-          <p>Son depósitos adicionales a lo que invertiste inicialmente, la frecuencia del depósito es la misma que la que definas en "Frecuencia anual de interés compuesto". Por ejemplo, si tus depósitos adicionales son de $100 entonces:</p>
+          <p>Son aportaciones adicionales al capital inicial. La frecuencia de estos depósitos será la misma que la que elijas en "Frecuencia anual de interés compuesto".
+             Por ejemplo, si decides hacer depósitos adicionales de $100 y seleccionas una frecuencia mensual, estarás agregando $100 cada mes a tu inversión.:</p>
           
           <div class="table-wrapper" style="margin-top: 15px;">
             <table style="width: 100%; border-collapse: collapse;">
