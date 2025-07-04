@@ -59,7 +59,7 @@
     .logo-executive-container {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
     }
     
     .executive-logo {
@@ -568,8 +568,8 @@
       }
       
       .executive-logo {
-        width: 120px;  /* Tamaño aumentado para móvil */
-        height: 120px; /* Tamaño aumentado para móvil */
+        width: 200px;  /* Tamaño aumentado para móvil */
+        height: 200px; /* Tamaño aumentado para móvil */
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
         padding-bottom: 15px;
