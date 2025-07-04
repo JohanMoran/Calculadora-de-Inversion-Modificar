@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -30,47 +31,47 @@
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--fondo-claro);
       color: var(--texto-claro);
-      padding: 15px;
+      padding: 10px;
       max-width: 1200px;
       margin: 0 auto;
       transition: background-color 0.4s, color 0.4s;
-      font-size: 16px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.4;
       -webkit-text-size-adjust: 100%;
     }
 
     /* Header para móvil */
     .mobile-header {
       text-align: center;
-      margin-bottom: 25px;
-      padding: 10px 0;
+      margin-bottom: 15px;
+      padding: 5px 0;
     }
 
     .mobile-header h1 {
       color: var(--primario);
-      font-size: 1.8rem;
-      margin-bottom: 5px;
+      font-size: 1.5rem;
+      margin-bottom: 3px;
       font-weight: 600;
     }
 
     .mobile-header h2 {
-      font-size: 1.3rem;
-      margin-bottom: 5px;
+      font-size: 1.1rem;
+      margin-bottom: 3px;
       font-weight: 500;
     }
 
     .mobile-header h3 {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       color: var(--secundario);
       font-weight: 600;
-      margin-top: 5px;
+      margin-top: 3px;
     }
 
     /* Estilos para preguntas */
     .mobile-question {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: #666;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       font-style: italic;
       display: block;
     }
@@ -82,16 +83,16 @@
     .calculadora-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 15px;
-      margin-top: 10px;
+      gap: 12px;
+      margin-top: 5px;
     }
 
     .input-card, .result-card {
       background: white;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
 
     body.dark .input-card,
@@ -99,43 +100,43 @@
     body.dark .chart-container,
     body.dark .table-wrapper {
       background: #1e1e1e;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
     }
 
     .input-card h3, .result-card h3 {
       margin-top: 0;
       color: var(--primario);
-      padding-bottom: 8px;
-      margin-bottom: 15px;
-      font-size: 1.2rem;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .input-card h3 i {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     .input-group {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     .input-group label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     input, select {
       width: 100%;
-      padding: 12px 15px;
+      padding: 10px 12px;
       border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 6px;
       background-color: #fff;
       transition: all 0.3s;
-      font-size: 1rem;
+      font-size: 0.95rem;
       -webkit-appearance: none;
     }
 
@@ -149,17 +150,17 @@
     .result-row {
       display: flex;
       justify-content: space-between;
-      margin: 12px 0;
-      font-size: 0.95rem;
+      margin: 10px 0;
+      font-size: 0.9rem;
     }
 
     .result-row.total {
       font-weight: bold;
       border-top: 1px solid #eee;
-      padding-top: 12px;
+      padding-top: 10px;
       color: var(--primario);
-      font-size: 1rem;
-      margin-top: 15px;
+      font-size: 0.95rem;
+      margin-top: 12px;
     }
 
     body.dark .result-row.total {
@@ -168,11 +169,11 @@
 
     .chart-container {
       background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      height: 350px;
-      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      height: 300px;
+      margin-bottom: 12px;
     }
 
     canvas {
@@ -182,36 +183,36 @@
 
     .dark-mode-btn {
       position: fixed;
-      top: 15px;
-      right: 15px;
+      top: 10px;
+      right: 10px;
       z-index: 999;
       background-color: var(--primario);
       color: white;
       border: none;
-      padding: 8px 15px;
+      padding: 6px 12px;
       border-radius: 20px;
       cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      font-size: 0.9rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
 
     .whatsapp-btn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 15px;
+      right: 15px;
       z-index: 999;
       background-color: #25D366;
       color: white;
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       transition: all 0.3s;
     }
 
@@ -221,32 +222,32 @@
     }
 
     .whatsapp-btn i {
-      font-size: 25px;
+      font-size: 22px;
     }
 
     .results-table-container {
-      margin-top: 15px;
+      margin-top: 12px;
     }
     
     .table-wrapper {
       overflow-x: auto;
-      max-height: 300px;
+      max-height: 250px;
       overflow-y: auto;
-      margin-top: 15px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-top: 12px;
+      border-radius: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
       -webkit-overflow-scrolling: touch;
     }
     
     #tablaResultados {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
     
     #tablaResultados th, 
     #tablaResultados td {
-      padding: 10px 12px;
+      padding: 8px 10px;
       text-align: right;
       border-bottom: 1px solid #eee;
     }
@@ -257,6 +258,7 @@
       position: sticky;
       top: 0;
       text-align: center;
+      font-size: 0.85rem;
     }
     
     #tablaResultados tr:nth-child(even) {
@@ -287,46 +289,81 @@
     /* Estilos para pantallas más grandes */
     @media (min-width: 768px) {
       body {
-        padding: 20px;
+        padding: 15px;
+        font-size: 15px;
       }
       
       .calculadora-grid {
         grid-template-columns: 1fr 2fr;
-        gap: 20px;
+        gap: 15px;
+      }
+      
+      .input-section {
+        max-width: 350px;
       }
       
       .chart-container {
         height: 400px;
-        padding: 20px;
       }
       
       .dark-mode-btn {
-        top: 20px;
-        right: 20px;
-        padding: 10px 15px;
+        top: 15px;
+        right: 15px;
+        padding: 8px 15px;
       }
       
       .whatsapp-btn {
-        width: 60px;
-        height: 60px;
-        bottom: 30px;
-        right: 30px;
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
       }
       
       .whatsapp-btn i {
-        font-size: 30px;
+        font-size: 25px;
       }
       
       .mobile-header h1 {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
       }
       
       .mobile-header h2 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
       }
       
       .mobile-header h3 {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
+      }
+      
+      .input-card, .result-card {
+        padding: 15px;
+      }
+      
+      .input-card h3, .result-card h3 {
+        font-size: 1.15rem;
+      }
+      
+      .result-row {
+        font-size: 0.95rem;
+      }
+      
+      #tablaResultados {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Estilos para pantallas muy grandes */
+    @media (min-width: 992px) {
+      .calculadora-grid {
+        grid-template-columns: 1fr 3fr;
+      }
+      
+      .input-section {
+        max-width: 320px;
+      }
+      
+      .chart-container {
+        height: 450px;
       }
     }
 
@@ -443,27 +480,27 @@
       <div class="chart-container">
         <canvas id="graficaBarras"></canvas>
       </div>
-    </div>
-
-    <!-- Tabla de resultados detallados -->
-    <div class="results-table-container">
-      <div class="input-card">
-        <h3><i class="fas fa-table"></i> Detalle de crecimiento</h3>
-        <div class="table-wrapper">
-          <table id="tablaResultados">
-            <thead>
-              <tr>
-                <th>Periodo</th>
-                <th>Depósito inicial</th>
-                <th>Aportaciones</th>
-                <th>Intereses</th>
-                <th>Total acumulado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Aquí se insertarán las filas dinámicamente -->
-            </tbody>
-          </table>
+      
+      <!-- Tabla de resultados detallados -->
+      <div class="results-table-container">
+        <div class="input-card">
+          <h3><i class="fas fa-table"></i> Detalle de crecimiento</h3>
+          <div class="table-wrapper">
+            <table id="tablaResultados">
+              <thead>
+                <tr>
+                  <th>Periodo</th>
+                  <th>Depósito inicial</th>
+                  <th>Aportaciones</th>
+                  <th>Intereses</th>
+                  <th>Total acumulado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Aquí se insertarán las filas dinámicamente -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
