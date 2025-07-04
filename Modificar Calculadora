@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -40,44 +39,54 @@
       -webkit-text-size-adjust: 100%;
     }
 
-    /* Header para móvil */
+    /* Header modificado */
     .mobile-header {
       text-align: center;
       margin-bottom: 15px;
       padding: 5px 0;
     }
+    
+    .mobile-header img {
+      max-width: 200px;
+      height: auto;
+    }
 
-    .mobile-header h1 {
+    /* Tooltips */
+    .tooltip-container {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+    }
+    
+    .tooltip-icon {
       color: var(--primario);
-      font-size: 1.5rem;
-      margin-bottom: 3px;
-      font-weight: 600;
+      cursor: help;
+      font-size: 0.9rem;
     }
-
-    .mobile-header h2 {
-      font-size: 1.1rem;
-      margin-bottom: 3px;
-      font-weight: 500;
+    
+    .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--primario);
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+      font-weight: normal;
+      font-style: normal;
     }
-
-    .mobile-header h3 {
-      font-size: 0.95rem;
-      color: var(--secundario);
-      font-weight: 600;
-      margin-top: 3px;
-    }
-
-    /* Estilos para preguntas */
-    .mobile-question {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 8px;
-      font-style: italic;
-      display: block;
-    }
-
-    body.dark .mobile-question {
-      color: #aaa;
+    
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
     }
 
     .calculadora-grid {
@@ -323,16 +332,8 @@
         font-size: 25px;
       }
       
-      .mobile-header h1 {
-        font-size: 1.8rem;
-      }
-      
-      .mobile-header h2 {
-        font-size: 1.3rem;
-      }
-      
-      .mobile-header h3 {
-        font-size: 1.1rem;
+      .mobile-header img {
+        max-width: 250px;
       }
       
       .input-card, .result-card {
@@ -349,6 +350,11 @@
       
       #tablaResultados {
         font-size: 0.85rem;
+      }
+      
+      .tooltip-text {
+        width: 250px;
+        font-size: 0.9rem;
       }
     }
 
@@ -388,31 +394,42 @@
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Modo Oscuro</button>
 
-  <!-- Header para móvil -->
+  <!-- Header con logo -->
   <div class="mobile-header">
-    <h1>Calculadora de Inversión</h1>
-    <h2>Johan Moran</h2>
-    <h3>ASESOR FINANCIERO</h3>
+    <img src="Johan_Moran.PNG" alt="Logo Johan Moran">
   </div>
 
   <div class="calculadora-grid">
     <!-- Columna izquierda - Inputs -->
     <div class="input-section">
       <div class="input-card">
-        <h3><i class="fas fa-coins"></i> Monto Inicial</h3>
-        <span class="mobile-question">¿Con qué cantidad cuentas en este momento? ¿Con cuánto empezarás tu inversión?</span>
+        <h3><i class="fas fa-coins"></i> Depósito inicial
+          <div class="tooltip-container">
+            <i class="fas fa-question-circle tooltip-icon"></i>
+            <span class="tooltip-text">¿Con qué cantidad vas a comenzar tu inversión?</span>
+          </div>
+        </h3>
         <div class="input-group">
           <input type="text" id="capitalInicial" placeholder="$0">
         </div>
         <div class="input-group">
-          <label for="tasa">Tasa de interés anual (%):</label>
-          <span class="mobile-question">¿Cuál es la tasa de rendimiento anual que te está ofreciendo la institución financiera?</span>
+          <label for="tasa">Tasa de interés anual (%):
+            <div class="tooltip-container">
+              <i class="fas fa-question-circle tooltip-icon"></i>
+              <span class="tooltip-text">Tasa de rendimiento anual que ofrece la institución financiera</span>
+            </div>
+          </label>
           <input type="number" id="tasa" step="0.01" placeholder="0">
         </div>
       </div>
 
       <div class="input-card">
-        <h3><i class="far fa-calendar-alt"></i> Plazo para invertir</h3>
+        <h3><i class="far fa-calendar-alt"></i> Plazo para invertir
+          <div class="tooltip-container">
+            <i class="fas fa-question-circle tooltip-icon"></i>
+            <span class="tooltip-text">Periodo de tiempo que mantendrás tu inversión</span>
+          </div>
+        </h3>
         <div class="input-group">
           <label for="tipoPlazo">Tipo de plazo:</label>
           <select id="tipoPlazo">
@@ -421,12 +438,21 @@
           </select>
         </div>
         <div class="input-group">
-          <label id="labelPlazo" for="plazo">Cantidad de años:</label>
-          <span class="mobile-question">¿Cuántos años vas a realizar la inversión? ¿Cuál es tu horizonte de inversión?</span>
+          <label id="labelPlazo" for="plazo">Cantidad de años:
+            <div class="tooltip-container">
+              <i class="fas fa-question-circle tooltip-icon"></i>
+              <span class="tooltip-text">Horizonte de tiempo para tu inversión</span>
+            </div>
+          </label>
           <input type="number" id="plazo" min="1" placeholder="0">
         </div>
         <div class="input-group">
-          <label for="frecuencia">Frecuencia de capitalización:</label>
+          <label for="frecuencia">Frecuencia de capitalización:
+            <div class="tooltip-container">
+              <i class="fas fa-question-circle tooltip-icon"></i>
+              <span class="tooltip-text">Con qué frecuencia se reinvertirán los intereses</span>
+            </div>
+          </label>
           <select id="frecuencia">
             <option value="12" selected>Mensualmente</option>
             <option value="4">Trimestral</option>
@@ -437,14 +463,28 @@
       </div>
 
       <div class="input-card">
-        <h3><i class="fas fa-hand-holding-usd"></i> Aportaciones adicionales</h3>
+        <h3><i class="fas fa-hand-holding-usd"></i> Aportaciones adicionales
+          <div class="tooltip-container">
+            <i class="fas fa-question-circle tooltip-icon"></i>
+            <span class="tooltip-text">Depósitos periódicos adicionales a tu inversión inicial</span>
+          </div>
+        </h3>
         <div class="input-group">
-          <label for="aportacion">Monto:</label>
-          <span class="mobile-question">¿Cuánto podrás aportar periódicamente a tu inversión?</span>
+          <label for="aportacion">Monto:
+            <div class="tooltip-container">
+              <i class="fas fa-question-circle tooltip-icon"></i>
+              <span class="tooltip-text">Cantidad que aportarás periódicamente</span>
+            </div>
+          </label>
           <input type="text" id="aportacion" placeholder="$0">
         </div>
         <div class="input-group">
-          <label for="frecuenciaAportacion">Frecuencia de aportación:</label>
+          <label for="frecuenciaAportacion">Frecuencia de aportación:
+            <div class="tooltip-container">
+              <i class="fas fa-question-circle tooltip-icon"></i>
+              <span class="tooltip-text">Con qué frecuencia realizarás aportaciones</span>
+            </div>
+          </label>
           <select id="frecuenciaAportacion">
             <option value="12" selected>Mensualmente</option>
             <option value="4">Trimestral</option>
@@ -537,15 +577,24 @@
       // Cambiar label de plazo según selección
       document.getElementById('tipoPlazo').addEventListener('change', function() {
         const labelPlazo = document.getElementById('labelPlazo');
+        const tooltip = labelPlazo.querySelector('.tooltip-text');
+        
         if (this.value === 'mensual') {
           labelPlazo.textContent = 'Cantidad de meses:';
+          tooltip.textContent = '¿Cuántos meses vas a realizar la inversión?';
           document.getElementById('plazo').placeholder = '0';
-          document.querySelector('.mobile-question', this.parentElement.parentElement).textContent = '¿Cuántos meses vas a realizar la inversión?';
         } else {
           labelPlazo.textContent = 'Cantidad de años:';
+          tooltip.textContent = '¿Cuántos años vas a realizar la inversión?';
           document.getElementById('plazo').placeholder = '0';
-          document.querySelector('.mobile-question', this.parentElement.parentElement).textContent = '¿Cuántos años vas a realizar la inversión?';
         }
+        
+        // Asegurarse de mantener el icono de tooltip
+        labelPlazo.innerHTML = labelPlazo.textContent + `<div class="tooltip-container">
+          <i class="fas fa-question-circle tooltip-icon"></i>
+          <span class="tooltip-text">${tooltip.textContent}</span>
+        </div>`;
+        
         calcular();
       });
 
@@ -663,7 +712,6 @@
           totalInteres += interesPeriodo;
           
           // Aportaciones anuales según frecuencia
-          // CORRECCIÓN: Ahora calcula correctamente las aportaciones mensuales en periodo anual
           if (frecuenciaAportacion === 12) {
             // Aportaciones mensuales: sumamos 12 aportaciones al año
             aportacionPeriodo = aportacionPeriodica * 12;
