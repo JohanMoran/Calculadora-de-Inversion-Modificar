@@ -41,37 +41,53 @@
     }
   
     /* Header ejecutivo - Modificado para logo más grande */
-    .executive-header {
+     .executive-header {
       background-color: #ffffff;
-      padding: 20px 40px;
+      padding: 20px;
       margin-bottom: 30px;
       border-radius: 8px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      border-bottom: 4px solid var(--primario);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: none; /* Eliminamos el borde inferior */
     }
     
     body.dark .executive-header {
       background-color: #1a1a1a;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      border-bottom-color: var(--secundario);
     }
     
-    .logo-executive-container {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+  .logo-executive-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
     
+  .executive-logo {
+    width: 250px;  /* Tamaño aumentado */
+    height: 250px; /* Tamaño aumentado */
+    object-fit: contain;
+    border-radius: 0;
+    padding: 10px;
+    border: none; /* Eliminamos bordes */
+    margin: 0; /* Eliminamos márgenes */
+  }
+    /* Ajustes para móviles */
+  @media (max-width: 768px) {
     .executive-logo {
-      width: 180px;  /* Tamaño aumentado */
-      height: 180px; /* Tamaño aumentado */
-      object-fit: contain;
-      border-radius: 0;
-      padding: 10px;
-      border-right: 1px solid #e0e0e0;
-      margin-right: 15px; /* Espacio adicional */
+      width: 200px;
+      height: 200px;
     }
-    
+  }
+
+  @media (max-width: 480px) {
+    .executive-logo {
+      width: 180px;
+      height: 180px;
+    }
+  }
     body.dark .executive-logo {
       border-right-color: #444;
     }
@@ -568,8 +584,8 @@
       }
       
       .executive-logo {
-        width: 200px;  /* Tamaño aumentado para móvil */
-        height: 200px; /* Tamaño aumentado para móvil */
+        width: 120px;  /* Tamaño aumentado para móvil */
+        height: 120px; /* Tamaño aumentado para móvil */
         border-right: none;
         border-bottom: 1px solid #e0e0e0;
         padding-bottom: 15px;
@@ -610,15 +626,10 @@
 
   <!-- Header ejecutivo con logo más grande -->
   <div class="executive-header">
-    <div class="logo-executive-container">
-      <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="executive-logo">
-      <div class="header-titles">
-        <h1>Calculadora de Interés Compuesto</h1>
-        <p class="subtitle">Herramienta profesional de proyección financiera</p>
-      </div>
-    </div>
+  <div class="logo-executive-container">
+    <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="executive-logo">
   </div>
-
+</div>
   <div class="calculadora-grid">
     <!-- Columna izquierda - Inputs -->
     <div class="input-section">
