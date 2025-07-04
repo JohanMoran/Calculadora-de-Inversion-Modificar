@@ -298,7 +298,7 @@
       }
       
       .input-section {
-        max-width: 350px;
+        max-width: 300px;
       }
       
       .chart-container {
