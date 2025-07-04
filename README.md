@@ -1,7 +1,8 @@
+  <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
   <title>Calculadora de Interés Compuesto</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -31,24 +32,37 @@
       background-color: var(--fondo-claro);
       color: var(--texto-claro);
       padding: 10px;
-      max-width: 1200px;
+      width: 100%;
+      min-width: 320px;
       margin: 0 auto;
       transition: background-color 0.4s, color 0.4s;
       font-size: 14px;
       line-height: 1.4;
       -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
     }
 
-    /* Header modificado */
+    /* Header mejorado con logo grande */
     .mobile-header {
       text-align: center;
-      margin-bottom: 15px;
-      padding: 5px 0;
+      margin-bottom: 30px;
+      padding: 15px 0;
+      background-color: var(--primario);
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
     
     .mobile-header img {
-      max-width: 200px;
+      max-width: 320px;
+      width: 80%;
       height: auto;
+      padding: 10px;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-header img:hover {
+      transform: scale(1.02);
     }
 
     /* Tooltips */
@@ -94,6 +108,8 @@
       grid-template-columns: 1fr;
       gap: 12px;
       margin-top: 5px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .input-card, .result-card {
@@ -102,6 +118,8 @@
       padding: 12px;
       margin-bottom: 12px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      width: 100%;
+      box-sizing: border-box;
     }
 
     body.dark .input-card,
@@ -140,13 +158,14 @@
 
     input, select {
       width: 100%;
-      padding: 10px 12px;
+      padding: 12px 15px;
       border: 1px solid #ddd;
       border-radius: 6px;
       background-color: #fff;
       transition: all 0.3s;
-      font-size: 0.95rem;
+      font-size: 16px;
       -webkit-appearance: none;
+      box-sizing: border-box;
     }
 
     body.dark input,
@@ -183,6 +202,7 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
       height: 300px;
       margin-bottom: 12px;
+      width: 100%;
     }
 
     canvas {
@@ -198,11 +218,11 @@
       background-color: var(--primario);
       color: white;
       border: none;
-      padding: 6px 12px;
+      padding: 10px 15px;
       border-radius: 20px;
       cursor: pointer;
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      font-size: 0.85rem;
+      font-size: 16px;
       display: flex;
       align-items: center;
       gap: 4px;
@@ -210,13 +230,13 @@
 
     .whatsapp-btn {
       position: fixed;
-      bottom: 15px;
-      right: 15px;
+      bottom: 20px;
+      right: 20px;
       z-index: 999;
       background-color: #25D366;
       color: white;
-      width: 45px;
-      height: 45px;
+      width: 55px;
+      height: 55px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -231,11 +251,12 @@
     }
 
     .whatsapp-btn i {
-      font-size: 22px;
+      font-size: 28px;
     }
 
     .results-table-container {
       margin-top: 12px;
+      width: 100%;
     }
     
     .table-wrapper {
@@ -246,12 +267,15 @@
       border-radius: 6px;
       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
       -webkit-overflow-scrolling: touch;
+      width: 100%;
+      display: block;
     }
     
     #tablaResultados {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.8rem;
+      min-width: 500px;
     }
     
     #tablaResultados th, 
@@ -318,22 +342,28 @@
       .dark-mode-btn {
         top: 15px;
         right: 15px;
-        padding: 8px 15px;
+        padding: 12px 18px;
+        font-size: 16px;
       }
       
       .whatsapp-btn {
-        width: 50px;
-        height: 50px;
-        bottom: 20px;
-        right: 20px;
+        width: 60px;
+        height: 60px;
+        bottom: 25px;
+        right: 25px;
       }
       
       .whatsapp-btn i {
-        font-size: 25px;
+        font-size: 30px;
+      }
+      
+      .mobile-header {
+        margin-bottom: 40px;
       }
       
       .mobile-header img {
-        max-width: 250px;
+        max-width: 400px;
+        width: 70%;
       }
       
       .input-card, .result-card {
@@ -371,6 +401,51 @@
       .chart-container {
         height: 450px;
       }
+      
+      .mobile-header img {
+        max-width: 450px;
+      }
+    }
+
+    /* Ajustes para móviles pequeños */
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+        font-size: 15px;
+      }
+      
+      .input-card, .result-card {
+        padding: 10px;
+      }
+      
+      input, select {
+        padding: 10px 12px;
+        font-size: 15px;
+      }
+      
+      .dark-mode-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      
+      .mobile-header img {
+        max-width: 280px;
+      }
+    }
+
+    /* Ajustes para móviles muy pequeños */
+    @media (max-width: 375px) {
+      .input-card h3, .result-card h3 {
+        font-size: 1rem;
+      }
+      
+      .result-row {
+        font-size: 0.85rem;
+      }
+      
+      .mobile-header img {
+        max-width: 250px;
+      }
     }
 
     /* Mejoras para inputs en móviles */
@@ -394,7 +469,7 @@
 <body>
   <button class="dark-mode-btn" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Modo Oscuro</button>
 
-  <!-- Header con logo -->
+  <!-- Header con logo grande -->
   <div class="mobile-header">
     <img src="Johan_Moran.PNG" alt="Logo Johan Moran">
   </div>
