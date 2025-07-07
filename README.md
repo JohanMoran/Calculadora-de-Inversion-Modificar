@@ -120,43 +120,84 @@
       transform: translateY(-2px);
     }
 
-    /* Resto del CSS... (mantén todo el CSS anterior que ya tenías) */
-    .tooltip-container {
-      position: relative;
-      display: inline-block;
-      margin-left: 5px;
-    }
-    
-    .tooltip-icon {
-      color: var(--primario);
-      cursor: help;
-      font-size: 0.9rem;
-    }
-    
+/* Estilos mejorados para tooltips en móviles */
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+  }
+  
+  .tooltip-icon {
+    color: var(--primario);
+    cursor: help;
+    font-size: 0.9rem;
+  }
+  
+  .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--primario);
+    color: white;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+    font-weight: normal;
+    line-height: 1.4;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  
+  .tooltip-container:hover .tooltip-text,
+  .tooltip-container:focus .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Estilos específicos para móviles */
+  @media (max-width: 768px) {
     .tooltip-text {
-      visibility: hidden;
-      width: 200px;
-      background-color: var(--primario);
-      color: white;
-      text-align: center;
-      border-radius: 6px;
-      padding: 8px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
+      width: 180px;
+      font-size: 0.75rem;
+      bottom: auto;
+      top: 100%;
       left: 50%;
       transform: translateX(-50%);
-      opacity: 0;
-      transition: opacity 0.3s;
-      font-size: 0.8rem;
-      font-weight: normal;
-      font-style: normal;
+      margin-top: 8px;
     }
     
-    .tooltip-container:hover .tooltip-text {
-      visibility: visible;
-      opacity: 1;
+    /* Para evitar que el tooltip se salga de la pantalla */
+    .tooltip-text {
+      max-width: 80vw;
+      left: 50%;
+      transform: translateX(-50%);
     }
+    
+    /* Posicionamiento alternativo si no cabe abajo */
+    .tooltip-container .tooltip-text.right {
+      left: auto;
+      right: 0;
+      transform: none;
+    }
+    
+    .tooltip-container .tooltip-text.left {
+      left: 0;
+      transform: none;
+    }
+  }
+
+  /* Mejorar accesibilidad para touch */
+  .tooltip-icon {
+    touch-action: manipulation;
+  }
   
     .calculadora-grid {
       display: grid;
@@ -1001,6 +1042,56 @@
   </a>
 
   <script>
+// Añadir este script para manejar mejor los tooltips en móviles
+  document.addEventListener('DOMContentLoaded', function() {
+    const tooltips = document.querySelectorAll('.tooltip-container');
+    
+    tooltips.forEach(tooltip => {
+      // Manejar clicks en móviles
+      tooltip.addEventListener('click', function(e) {
+        e.preventDefault();
+        const tooltipText = this.querySelector('.tooltip-text');
+        const allTooltips = document.querySelectorAll('.tooltip-text');
+        
+        // Cerrar otros tooltips abiertos
+        allTooltips.forEach(tt => {
+          if (tt !== tooltipText) {
+            tt.style.visibility = 'hidden';
+            tt.style.opacity = '0';
+          }
+        });
+        
+        // Alternar este tooltip
+        if (tooltipText.style.visibility === 'visible') {
+          tooltipText.style.visibility = 'hidden';
+          tooltipText.style.opacity = '0';
+        } else {
+          // Ajustar posición si no cabe
+          const rect = tooltipText.getBoundingClientRect();
+          
+          if (rect.bottom > window.innerHeight) {
+            tooltipText.classList.add('right');
+          } else if (rect.left < 0) {
+            tooltipText.classList.add('left');
+          }
+          
+          tooltipText.style.visibility = 'visible';
+          tooltipText.style.opacity = '1';
+        }
+      });
+      
+      // Cerrar tooltips al tocar fuera
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.tooltip-container')) {
+          const allTooltips = document.querySelectorAll('.tooltip-text');
+          allTooltips.forEach(tt => {
+            tt.style.visibility = 'hidden';
+            tt.style.opacity = '0';
+          });
+        }
+      });
+    });
+  });
     // Variables globales
     let chartBarras = null;
     let totalAportaciones = 0;
