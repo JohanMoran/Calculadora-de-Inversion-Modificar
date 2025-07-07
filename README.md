@@ -787,7 +787,7 @@
       </div>
 
       <div class="input-card">
-        <h3><i class="far fa-calendar-alt"></i> Plazo para invertir
+        <h3><i class="far fa-calendar-alt"></i> Plazo para Invertir
           <div class="tooltip-container">
             <i class="fas fa-question-circle tooltip-icon"></i>
             <span class="tooltip-text">Periodo de tiempo que mantendrás tu inversión</span>
@@ -796,8 +796,8 @@
         <div class="input-group">
           <label for="tipoPlazo">Tipo de plazo:</label>
           <select id="tipoPlazo">
+            <option value="mensual">Periodo en Meses</option>
             <option value="anual">Periodo en Años</option>
-            <option value="mensual">Periodod en Meses</option>
           </select>
         </div>
         <div class="input-group">
@@ -923,7 +923,7 @@
       <!-- Tabla de resultados detallados -->
       <div class="results-table-container">
         <div class="input-card">
-          <h3><i class="fas fa-table"></i> Detalle de crecimiento</h3>
+          <h3><i class="fas fa-table"></i> Tabla Amortizada de Inversion</h3>
           <div class="table-wrapper">
             <table id="tablaResultados">
               <thead>
