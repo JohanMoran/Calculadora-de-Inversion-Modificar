@@ -579,39 +579,127 @@
       }
     }
     
-    /* Responsive para móviles */
+    /* Ajustes para móviles */
     @media (max-width: 768px) {
-      .hero-logo {
-        width: 95%;
-        border-radius: 15px;
+      body {
+        padding: 10px;
+        min-width: 100%;
+        overflow-x: hidden;
       }
       
-      .export-buttons {
+      .calculadora-grid {
+        display: flex;
         flex-direction: column;
+        gap: 10px;
       }
-    }
-    
-    @media (max-width: 480px) {
-      body {
+      
+      .input-card, .result-card, .chart-container {
+        width: 100%;
+        box-sizing: border-box;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      
+      /* Ajuste para la tabla */
+      .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        display: block;
+      }
+      
+      #tablaResultados {
+        min-width: 600px; /* Ancho mínimo para mantener legibilidad */
+      }
+      
+      /* Ajuste para el gráfico */
+      .chart-container {
+        height: 300px;
         padding: 10px;
       }
       
-      .hero-logo {
-        border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      /* Mejor disposición de los elementos de resumen */
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
       }
       
-      body.dark .hero-logo {
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      /* Ajuste para inputs */
+      .input-group input, 
+      .input-group select {
+        font-size: 16px; /* Mejor legibilidad en móviles */
+        padding: 12px;
+      }
+      
+      /* Botones de exportación */
+      .export-buttons {
+        flex-direction: column;
+      }
+      
+      .export-btn {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      
+      /* Logo hero */
+      .hero-logo {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
+      
+      /* FAQ responsive */
+      .faq-item {
+        margin-bottom: 8px;
+      }
+      
+      .faq-question {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Ajustes específicos para pantallas muy pequeñas (menos de 480px) */
+    @media (max-width: 480px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
       }
       
       .input-card, .result-card {
         padding: 12px;
       }
       
-      .summary-item {
-        padding: 12px;
+      .chart-container {
+        height: 250px;
       }
+      
+      /* Reducir padding en móviles pequeños */
+      body {
+        padding: 8px;
+      }
+      
+      /* Ajustar tamaño de fuente en inputs */
+      input, select {
+        font-size: 14px;
+      }
+      
+      /* Mejorar visualización de tooltips */
+      .tooltip-text {
+        width: 150px;
+        font-size: 0.7rem;
+      }
+    }
+
+    /* Prevenir desbordamiento horizontal en todos los elementos */
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    /* Asegurar que el contenedor principal no cause overflow */
+    .calculadora-grid {
+      width: 100%;
+      overflow: hidden;
     }
   </style>
 </head>
@@ -980,6 +1068,10 @@
         });
       });
 
+      // Ajustar tabla para móviles
+      ajustarTablaParaMoviles();
+      window.addEventListener('resize', ajustarTablaParaMoviles);
+
       // Calcular inicialmente
       calcular();
     });
@@ -1180,6 +1272,7 @@
 
     function generarGraficoBarras(datos, labels) {
       const ctx = document.getElementById('graficaBarras').getContext('2d');
+      const esMovil = window.innerWidth < 768;
       
       if (chartBarras) {
         chartBarras.destroy();
@@ -1201,6 +1294,83 @@
         acumuladoIntereses += item.intereses;
         return acumuladoIntereses;
       });
+
+      // Configuración base del gráfico
+      const opcionesGrafico = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            stacked: true,
+            grid: {
+              display: false
+            },
+            ticks: {
+              maxRotation: 45,
+              minRotation: 45
+            }
+          },
+          y: {
+            stacked: true,
+            ticks: {
+              callback: (value) => formatCurrency(value)
+            },
+            grid: {
+              color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)'
+            },
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              boxWidth: 12,
+              padding: 20,
+              usePointStyle: true,
+              pointStyle: 'rect'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += formatCurrency(context.parsed.y);
+                }
+                return label;
+              },
+              footer: (items) => {
+                const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
+                return `Total acumulado: ${formatCurrency(total)}`;
+              }
+            }
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        }
+      };
+
+      // Configuración específica para móviles
+      const opcionesMovil = {
+        scales: {
+          x: {
+            ticks: {
+              display: false // Ocultar etiquetas del eje X en móviles
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      };
 
       chartBarras = new Chart(ctx, {
         type: 'bar',
@@ -1233,65 +1403,7 @@
             }
           ]
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              stacked: true,
-              grid: {
-                display: false
-              },
-              ticks: {
-                maxRotation: 45,
-                minRotation: 45
-              }
-            },
-            y: {
-              stacked: true,
-              ticks: {
-                callback: (value) => formatCurrency(value)
-              },
-              grid: {
-                color: (context) => context.tick.value === 0 ? '#888' : 'rgba(0, 0, 0, 0.1)'
-              },
-              beginAtZero: true
-            }
-          },
-          plugins: {
-            legend: {
-              position: 'top',
-              labels: {
-                boxWidth: 12,
-                padding: 20,
-                usePointStyle: true,
-                pointStyle: 'rect'
-              }
-            },
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  let label = context.dataset.label || '';
-                  if (label) {
-                    label += ': ';
-                  }
-                  if (context.parsed.y !== null) {
-                    label += formatCurrency(context.parsed.y);
-                  }
-                  return label;
-                },
-                footer: (items) => {
-                  const total = items.reduce((sum, item) => sum + item.parsed.y, 0);
-                  return `Total acumulado: ${formatCurrency(total)}`;
-                }
-              }
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index'
-          }
-        }
+        options: esMovil ? Object.assign({}, opcionesGrafico, opcionesMovil) : opcionesGrafico
       });
     }
 
@@ -1325,6 +1437,42 @@
       });
     }
 
+    function ajustarTablaParaMoviles() {
+      if (window.innerWidth < 768) {
+        const tabla = document.getElementById('tablaResultados');
+        const contenedor = document.querySelector('.table-wrapper');
+        
+        // Ajustar el ancho de la tabla al contenedor
+        tabla.style.width = '100%';
+        
+        // Opcional: Ocultar columnas menos importantes en móviles
+        const columnasOcultar = [1, 2]; // Índices de columnas a ocultar (0-based)
+        const filas = tabla.querySelectorAll('tr');
+        
+        filas.forEach(fila => {
+          const celdas = fila.querySelectorAll('td, th');
+          celdas.forEach((celda, index) => {
+            if (columnasOcultar.includes(index)) {
+              celda.style.display = 'none';
+            } else {
+              celda.style.display = '';
+            }
+          });
+        });
+      } else {
+        // Restaurar visualización en pantallas grandes
+        const tabla = document.getElementById('tablaResultados');
+        const filas = tabla.querySelectorAll('tr');
+        
+        filas.forEach(fila => {
+          const celdas = fila.querySelectorAll('td, th');
+          celdas.forEach(celda => {
+            celda.style.display = '';
+          });
+        });
+      }
+    }
+
     function formatCurrency(value) {
       return new Intl.NumberFormat('es-MX', { 
         style: 'currency', 
@@ -1335,232 +1483,233 @@
     }
 
     // Función para exportar a PDF
-async function exportToPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4'
-  });
+    async function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
 
-  // Configuración de estilos
-  const primaryColor = '#2b6777';
-  const secondaryColor = '#52ab98';
-  const accentColor = '#28a745';
-  const textColor = '#333333';
-  const lightGray = '#f5f5f5';
-  
-  // Margenes y dimensiones
-  const margin = 15;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const contentWidth = pageWidth - margin * 2;
-  let yPosition = margin;
+      // Configuración de estilos
+      const primaryColor = '#2b6777';
+      const secondaryColor = '#52ab98';
+      const accentColor = '#28a745';
+      const textColor = '#333333';
+      const lightGray = '#f5f5f5';
+      
+      // Margenes y dimensiones
+      const margin = 15;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const contentWidth = pageWidth - margin * 2;
+      let yPosition = margin;
 
-  // 1. Encabezado del reporte
-  doc.setFontSize(18);
-  doc.setTextColor(primaryColor);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Reporte de Proyección Financiera', pageWidth / 2, yPosition, { align: 'center' });
-  
-  doc.setFontSize(10);
-  doc.setTextColor(100);
-  doc.setFont('helvetica', 'normal');
-  yPosition += 8;
-  doc.text(`Generado el: ${new Date().toLocaleDateString('es-MX', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })}`, pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 15;
+      // 1. Encabezado del reporte
+      doc.setFontSize(18);
+      doc.setTextColor(primaryColor);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Reporte de Proyección Financiera', pageWidth / 2, yPosition, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.setFont('helvetica', 'normal');
+      yPosition += 8;
+      doc.text(`Generado el: ${new Date().toLocaleDateString('es-MX', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })}`, pageWidth / 2, yPosition, { align: 'center' });
+      
+      yPosition += 15;
 
-  // 2. Resumen Ejecutivo (4 cuadros en 2 filas)
-  doc.setFontSize(14);
-  doc.setTextColor(primaryColor);
-  doc.text('Resumen Ejecutivo', margin, yPosition);
-  doc.setDrawColor(primaryColor);
-  doc.setLineWidth(0.3);
-  doc.line(margin, yPosition + 2, margin + 40, yPosition + 2);
-  
-  yPosition += 10;
+      // 2. Resumen Ejecutivo (4 cuadros en 2 filas)
+      doc.setFontSize(14);
+      doc.setTextColor(primaryColor);
+      doc.text('Resumen Ejecutivo', margin, yPosition);
+      doc.setDrawColor(primaryColor);
+      doc.setLineWidth(0.3);
+      doc.line(margin, yPosition + 2, margin + 40, yPosition + 2);
+      
+      yPosition += 10;
 
-  const summaryData = [
-    { 
-      icon: '💰',
-      label: 'Inversión Inicial', 
-      value: document.getElementById('res-inicial').textContent,
-      color: primaryColor
-    },
-    { 
-      icon: '📥',
-      label: 'Aportaciones', 
-      value: document.getElementById('res-aportaciones').textContent,
-      color: secondaryColor
-    },
-    { 
-      icon: '📈',
-      label: 'Intereses', 
-      value: document.getElementById('res-intereses').textContent,
-      color: '#6c757d'
-    },
-    { 
-      icon: '🏦',
-      label: 'Total Final', 
-      value: document.getElementById('res-total').textContent,
-      color: accentColor
+      const summaryData = [
+        { 
+          icon: '💰',
+          label: 'Inversión Inicial', 
+          value: document.getElementById('res-inicial').textContent,
+          color: primaryColor
+        },
+        { 
+          icon: '📥',
+          label: 'Aportaciones', 
+          value: document.getElementById('res-aportaciones').textContent,
+          color: secondaryColor
+        },
+        { 
+          icon: '📈',
+          label: 'Intereses', 
+          value: document.getElementById('res-intereses').textContent,
+          color: '#6c757d'
+        },
+        { 
+          icon: '🏦',
+          label: 'Total Final', 
+          value: document.getElementById('res-total').textContent,
+          color: accentColor
+        }
+      ];
+
+      // Diseño de 2x2 para los cuadros de resumen
+      const boxWidth = contentWidth / 2 - 5;
+      const boxHeight = 20;
+      
+      summaryData.forEach((item, i) => {
+        const xPosition = margin + (i % 2 === 0 ? 0 : boxWidth + 10);
+        const currentY = yPosition + (i > 1 ? boxHeight + 10 : 0);
+        
+        // Fondo del cuadro
+        doc.setFillColor(255, 255, 255);
+        doc.setDrawColor(220, 220, 220);
+        doc.roundedRect(xPosition, currentY, boxWidth, boxHeight, 2, 2, 'FD');
+        
+        // Borde izquierdo de color
+        doc.setFillColor(item.color);
+        doc.rect(xPosition, currentY, 4, boxHeight, 'F');
+        
+        // Icono
+        doc.setFontSize(12);
+        doc.setTextColor(item.color);
+        doc.text(item.icon, xPosition + 8, currentY + 12);
+        
+        // Texto
+        doc.setFontSize(9);
+        doc.setTextColor(100);
+        doc.text(item.label, xPosition + 20, currentY + 8);
+        
+        // Valor
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(textColor);
+        if (item.label === 'Total Final') doc.setTextColor(accentColor);
+        doc.text(item.value, xPosition + 20, currentY + 15);
+      });
+
+      yPosition += boxHeight * 2 + 15;
+
+      // 3. Gráfico de la inversión (capturamos el canvas como imagen)
+      doc.setFontSize(14);
+      doc.setTextColor(primaryColor);
+      doc.text('Progresión de la Inversión', margin, yPosition);
+      doc.setDrawColor(primaryColor);
+      doc.line(margin, yPosition + 2, margin + 50, yPosition + 2);
+      
+      yPosition += 10;
+
+      try {
+        const canvas = document.getElementById('graficaBarras');
+        const canvasImage = await html2canvas(canvas, {
+          scale: 2,
+          logging: false,
+          useCORS: true,
+          allowTaint: true
+        });
+
+        const imgData = canvasImage.toDataURL('image/png');
+        const imgProps = doc.getImageProperties(imgData);
+        const imgWidth = contentWidth;
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+        
+        // Ajustamos altura máxima para el gráfico
+        const maxChartHeight = 80;
+        const finalHeight = imgHeight > maxChartHeight ? maxChartHeight : imgHeight;
+        
+        doc.addImage(imgData, 'PNG', margin, yPosition, imgWidth, finalHeight);
+        yPosition += finalHeight + 10;
+      } catch (error) {
+        console.error("Error al generar gráfico:", error);
+        doc.setFontSize(10);
+        doc.setTextColor('#dc3545');
+        doc.text('No se pudo incluir el gráfico en el reporte', margin, yPosition);
+        yPosition += 10;
+      }
+
+      // 4. Detalle de crecimiento (tabla)
+      doc.setFontSize(14);
+      doc.setTextColor(primaryColor);
+      doc.text('Detalle por Periodos', margin, yPosition);
+      doc.setDrawColor(primaryColor);
+      doc.line(margin, yPosition + 2, margin + 40, yPosition + 2);
+      
+      yPosition += 10;
+
+      // Preparamos datos para la tabla
+      const tableData = [];
+      const headers = ['Periodo', 'Inicial', 'Aportaciones', 'Intereses', 'Total'];
+      const rows = document.querySelectorAll('#tablaResultados tbody tr');
+      
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        tableData.push([
+          cells[0].textContent.trim(),
+          cells[1].textContent.trim(),
+          cells[2].textContent.trim(),
+          cells[3].textContent.trim(),
+          cells[4].textContent.trim()
+        ]);
+      });
+
+      // Estilo de tabla profesional
+      doc.autoTable({
+        head: [headers],
+        body: tableData,
+        startY: yPosition,
+        theme: 'grid',
+        headStyles: {
+          fillColor: primaryColor,
+          textColor: 255,
+          fontStyle: 'bold',
+          fontSize: 9
+        },
+        bodyStyles: {
+          fontSize: 8,
+          cellPadding: 2
+        },
+        alternateRowStyles: {
+          fillColor: lightGray
+        },
+        columnStyles: {
+          0: { cellWidth: 'auto', halign: 'center' },
+          1: { cellWidth: 'auto', halign: 'right' },
+          2: { cellWidth: 'auto', halign: 'right' },
+          3: { cellWidth: 'auto', halign: 'right' },
+          4: { cellWidth: 'auto', halign: 'right', fontStyle: 'bold' }
+        },
+        margin: { left: margin, right: margin },
+        tableWidth: contentWidth,
+        styles: {
+          overflow: 'linebreak',
+          lineWidth: 0.1,
+          lineColor: 200
+        },
+        didDrawPage: function(data) {
+          // Footer en cada página
+          doc.setFontSize(8);
+          doc.setTextColor(150);
+          doc.text(
+            'Calculadora de Interés Compuesto - Herramienta profesional de proyección financiera',
+            pageWidth / 2,
+            doc.internal.pageSize.getHeight() - 10,
+            { align: 'center' }
+          );
+        }
+      });
+
+      // Guardar el PDF
+      doc.save(`Reporte_Financiero_${new Date().toISOString().slice(0,10)}.pdf`);
     }
-  ];
 
-  // Diseño de 2x2 para los cuadros de resumen
-  const boxWidth = contentWidth / 2 - 5;
-  const boxHeight = 20;
-  
-  summaryData.forEach((item, i) => {
-    const xPosition = margin + (i % 2 === 0 ? 0 : boxWidth + 10);
-    const currentY = yPosition + (i > 1 ? boxHeight + 10 : 0);
-    
-    // Fondo del cuadro
-    doc.setFillColor(255, 255, 255);
-    doc.setDrawColor(220, 220, 220);
-    doc.roundedRect(xPosition, currentY, boxWidth, boxHeight, 2, 2, 'FD');
-    
-    // Borde izquierdo de color
-    doc.setFillColor(item.color);
-    doc.rect(xPosition, currentY, 4, boxHeight, 'F');
-    
-    // Icono
-    doc.setFontSize(12);
-    doc.setTextColor(item.color);
-    doc.text(item.icon, xPosition + 8, currentY + 12);
-    
-    // Texto
-    doc.setFontSize(9);
-    doc.setTextColor(100);
-    doc.text(item.label, xPosition + 20, currentY + 8);
-    
-    // Valor
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(textColor);
-    if (item.label === 'Total Final') doc.setTextColor(accentColor);
-    doc.text(item.value, xPosition + 20, currentY + 15);
-  });
-
-  yPosition += boxHeight * 2 + 15;
-
-  // 3. Gráfico de la inversión (capturamos el canvas como imagen)
-  doc.setFontSize(14);
-  doc.setTextColor(primaryColor);
-  doc.text('Progresión de la Inversión', margin, yPosition);
-  doc.setDrawColor(primaryColor);
-  doc.line(margin, yPosition + 2, margin + 50, yPosition + 2);
-  
-  yPosition += 10;
-
-  try {
-    const canvas = document.getElementById('graficaBarras');
-    const canvasImage = await html2canvas(canvas, {
-      scale: 2,
-      logging: false,
-      useCORS: true,
-      allowTaint: true
-    });
-
-    const imgData = canvasImage.toDataURL('image/png');
-    const imgProps = doc.getImageProperties(imgData);
-    const imgWidth = contentWidth;
-    const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-    
-    // Ajustamos altura máxima para el gráfico
-    const maxChartHeight = 80;
-    const finalHeight = imgHeight > maxChartHeight ? maxChartHeight : imgHeight;
-    
-    doc.addImage(imgData, 'PNG', margin, yPosition, imgWidth, finalHeight);
-    yPosition += finalHeight + 10;
-  } catch (error) {
-    console.error("Error al generar gráfico:", error);
-    doc.setFontSize(10);
-    doc.setTextColor('#dc3545');
-    doc.text('No se pudo incluir el gráfico en el reporte', margin, yPosition);
-    yPosition += 10;
-  }
-
-  // 4. Detalle de crecimiento (tabla)
-  doc.setFontSize(14);
-  doc.setTextColor(primaryColor);
-  doc.text('Detalle por Periodos', margin, yPosition);
-  doc.setDrawColor(primaryColor);
-  doc.line(margin, yPosition + 2, margin + 40, yPosition + 2);
-  
-  yPosition += 10;
-
-  // Preparamos datos para la tabla
-  const tableData = [];
-  const headers = ['Periodo', 'Inicial', 'Aportaciones', 'Intereses', 'Total'];
-  const rows = document.querySelectorAll('#tablaResultados tbody tr');
-  
-  rows.forEach(row => {
-    const cells = row.querySelectorAll('td');
-    tableData.push([
-      cells[0].textContent.trim(),
-      cells[1].textContent.trim(),
-      cells[2].textContent.trim(),
-      cells[3].textContent.trim(),
-      cells[4].textContent.trim()
-    ]);
-  });
-
-  // Estilo de tabla profesional
-  doc.autoTable({
-    head: [headers],
-    body: tableData,
-    startY: yPosition,
-    theme: 'grid',
-    headStyles: {
-      fillColor: primaryColor,
-      textColor: 255,
-      fontStyle: 'bold',
-      fontSize: 9
-    },
-    bodyStyles: {
-      fontSize: 8,
-      cellPadding: 2
-    },
-    alternateRowStyles: {
-      fillColor: lightGray
-    },
-    columnStyles: {
-      0: { cellWidth: 'auto', halign: 'center' },
-      1: { cellWidth: 'auto', halign: 'right' },
-      2: { cellWidth: 'auto', halign: 'right' },
-      3: { cellWidth: 'auto', halign: 'right' },
-      4: { cellWidth: 'auto', halign: 'right', fontStyle: 'bold' }
-    },
-    margin: { left: margin, right: margin },
-    tableWidth: contentWidth,
-    styles: {
-      overflow: 'linebreak',
-      lineWidth: 0.1,
-      lineColor: 200
-    },
-    didDrawPage: function(data) {
-      // Footer en cada página
-      doc.setFontSize(8);
-      doc.setTextColor(150);
-      doc.text(
-        'Calculadora de Interés Compuesto - Herramienta profesional de proyección financiera',
-        pageWidth / 2,
-        doc.internal.pageSize.getHeight() - 10,
-        { align: 'center' }
-      );
-    }
-  });
-
-  // Guardar el PDF
-  doc.save(`Reporte_Financiero_${new Date().toISOString().slice(0,10)}.pdf`);
-}
     // Función para exportar a Excel
     function exportToExcel() {
       // Preparar datos
