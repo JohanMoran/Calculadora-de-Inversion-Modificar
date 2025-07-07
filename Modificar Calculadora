@@ -716,6 +716,29 @@
       input, select {
         font-size: 14px;
       }
+
+      /* Estilos específicos para la tabla en móviles pequeños */
+      #tablaResultados th, 
+      #tablaResultados td {
+        padding: 6px 4px;
+        font-size: 12px;
+      }
+      
+      #tablaResultados th {
+        font-size: 11px;
+        padding: 8px 4px;
+      }
+      
+      .table-wrapper {
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      
+      body.dark .table-wrapper {
+        border-color: #444;
+      }
     }
 
     /* Prevenir desbordamiento horizontal en todos los elementos */
@@ -736,7 +759,7 @@
 
   <!-- Logo hero -->
   <div class="logo-hero">
-    <img src="ROBPAIERO_TUASESORDECONFIANZA.PNG" alt="Logo Roberto Palero" class="hero-logo">
+    <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="hero-logo">
   </div>
 
   <div class="calculadora-grid">
@@ -773,9 +796,8 @@
         <div class="input-group">
           <label for="tipoPlazo">Tipo de plazo:</label>
           <select id="tipoPlazo">
-            
-            <option value="mensual">Periodo en Meses</option>
             <option value="anual">Periodo en Años</option>
+            <option value="mensual">Periodod en Meses</option>
           </select>
         </div>
         <div class="input-group">
@@ -828,6 +850,7 @@
           </label>
           <select id="frecuenciaAportacion">
             <option value="12" selected>Mensualmente</option>
+            <option value="6">Bimestralmente</option>
             <option value="4">Trimestral</option>
             <option value="2">Semestral</option>
             <option value="1">Anualmente</option>
@@ -1025,7 +1048,7 @@
   </div>
 
   <!-- Botón flotante de WhatsApp -->
-  <a href="https://wa.me/523324967419?text=Hola,%20me%20interesa%20saber%20m%C3%A1s%20sobre%20inversiones%20%F0%9F%92%B0%F0%9F%93%88" class="whatsapp-btn" target="_blank" title="Contactar por WhatsApp">
+  <a href="https://wa.me/523318853923?text=Hola,%20me%20interesa%20saber%20m%C3%A1s%20sobre%20inversiones%20%F0%9F%92%B0%F0%9F%93%88" class="whatsapp-btn" target="_blank" title="Contactar por WhatsApp">
     <i class="fab fa-whatsapp"></i>
   </a>
 
@@ -1292,12 +1315,15 @@
           if (frecuenciaAportacion === 12) {
             // Aportaciones mensuales: sumamos 12 aportaciones al año
             aportacionPeriodo = aportacionPeriodica * 12;
+          } else if (frecuenciaAportacion === 6) {
+            // Aportaciones bimestrales: sumamos 6 aportaciones al año
+            aportacionPeriodo = aportacionPeriodica * 2;
           } else if (frecuenciaAportacion === 4) {
             // Aportaciones trimestrales: sumamos 4 aportaciones al año
-            aportacionPeriodo = aportacionPeriodica * 4;
+            aportacionPeriodo = aportacionPeriodica * 3;
           } else if (frecuenciaAportacion === 2) {
             // Aportaciones semestrales: sumamos 2 aportaciones al año
-            aportacionPeriodo = aportacionPeriodica * 2;
+            aportacionPeriodo = aportacionPeriodica * 6;
           } else {
             // Aportaciones anuales: solo una aportación
             aportacionPeriodo = aportacionPeriodica;
@@ -1498,7 +1524,6 @@
       datos.forEach((item, index) => {
         const fila = document.createElement('tr');
         
-        // Formateamos diferente si es mensual o anual
         const periodo = esMensual ? `Mes ${item.periodo}` : `Año ${item.periodo}`;
         
         fila.innerHTML = `
@@ -1509,7 +1534,6 @@
           <td><strong>${formatCurrency(item.total)}</strong></td>
         `;
         
-        // Destacamos los periodos anuales si es mensual
         if (esMensual && item.periodo % 12 === 0) {
           fila.style.backgroundColor = 'rgba(82, 171, 152, 0.2)';
           if (document.body.classList.contains('dark')) {
@@ -1519,39 +1543,53 @@
         
         tbody.appendChild(fila);
       });
+      
+      // Asegurarse de que la tabla se ajuste al dispositivo
+      ajustarTablaParaMoviles();
     }
 
     function ajustarTablaParaMoviles() {
-      if (window.innerWidth < 768) {
-        const tabla = document.getElementById('tablaResultados');
-        const contenedor = document.querySelector('.table-wrapper');
-        
+      const tabla = document.getElementById('tablaResultados');
+      const contenedor = document.querySelector('.table-wrapper');
+      const esMovil = window.innerWidth < 768;
+      
+      if (esMovil) {
         // Ajustar el ancho de la tabla al contenedor
         tabla.style.width = '100%';
         
-        // Opcional: Ocultar columnas menos importantes en móviles
-        const columnasOcultar = [1, 2]; // Índices de columnas a ocultar (0-based)
+        // Mostrar todas las columnas pero con mejor formato para móviles
+        const columnasMostrar = [0, 1, 2, 3, 4]; // Todas las columnas
         const filas = tabla.querySelectorAll('tr');
         
         filas.forEach(fila => {
           const celdas = fila.querySelectorAll('td, th');
           celdas.forEach((celda, index) => {
-            if (columnasOcultar.includes(index)) {
-              celda.style.display = 'none';
-            } else {
+            if (columnasMostrar.includes(index)) {
               celda.style.display = '';
+              // Ajustar tamaño de fuente para móviles
+              celda.style.fontSize = '12px';
+              celda.style.padding = '6px 4px';
+            } else {
+              celda.style.display = 'none';
             }
           });
         });
+        
+        // Ajustar el contenedor de la tabla
+        contenedor.style.overflowX = 'auto';
+        contenedor.style.maxHeight = 'none';
+        contenedor.style.border = '1px solid #e0e0e0';
+        contenedor.style.borderRadius = '6px';
       } else {
         // Restaurar visualización en pantallas grandes
-        const tabla = document.getElementById('tablaResultados');
         const filas = tabla.querySelectorAll('tr');
         
         filas.forEach(fila => {
           const celdas = fila.querySelectorAll('td, th');
           celdas.forEach(celda => {
             celda.style.display = '';
+            celda.style.fontSize = '';
+            celda.style.padding = '';
           });
         });
       }
