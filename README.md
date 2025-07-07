@@ -773,8 +773,9 @@
         <div class="input-group">
           <label for="tipoPlazo">Tipo de plazo:</label>
           <select id="tipoPlazo">
+            
+            <option value="mensual">Periodo en Meses</option>
             <option value="anual">Periodo en Años</option>
-            <option value="mensual">Periodod en Meses</option>
           </select>
         </div>
         <div class="input-group">
