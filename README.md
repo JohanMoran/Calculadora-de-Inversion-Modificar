@@ -759,7 +759,7 @@
 
   <!-- Logo hero -->
   <div class="logo-hero">
-    <img src="ROBPAIERO_TUASESORDECONFIANZA.PNG" alt="Logo Roberto Palero" class="hero-logo">
+    <img src="Johan_Moran.PNG" alt="Logo Johan Moran" class="hero-logo">
   </div>
 
   <div class="calculadora-grid">
