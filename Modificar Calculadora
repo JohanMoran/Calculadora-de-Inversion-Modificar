@@ -1058,7 +1058,7 @@
     let totalAportaciones = 0;
     let totalInteres = 0;
     let capital = 0;
-    const MAX_PERIODOS_TABLA = 60; // Mostrar máximo 5 años en meses
+    const MAX_PERIODOS_TABLA = 100; // Cambiado de 60 a 100 periodos
 
     // Inicialización
     document.addEventListener('DOMContentLoaded', function() {
@@ -1260,96 +1260,133 @@
         return;
       }
 
-      // Convertir plazo a años si está en meses
-      const plazoAnios = tipoPlazo === 'mensual' ? plazo / 12 : plazo;
-      const totalMeses = tipoPlazo === 'mensual' ? plazo : plazo * 12;
+      // Determinar total de periodos
+      let totalPeriodos;
+      let esMensual;
+      
+      if (tipoPlazo === 'mensual') {
+        totalPeriodos = plazo;
+        esMensual = true;
+      } else {
+        totalPeriodos = plazo * 12; // Convertir años a meses para cálculo interno
+        esMensual = false;
+      }
 
       // Calcular valores
       let resultados = [];
-      capital = capitalInicial;
-      totalAportaciones = 0;
+      let capitalActual = capitalInicial;
+      totalAportaciones = capitalInicial; // Incluye el depósito inicial
       totalInteres = 0;
 
-      const tasaPeriodica = tasaAnual / 100 / frecuencia;
-      const aportacionPeriodica = aportacion;
-      const aportacionesPorAnio = 12 / frecuenciaAportacion;
-      const totalAportacionesPeriodos = tipoPlazo === 'mensual' ? 
-        (plazo / (12 / frecuenciaAportacion)) : 
-        (plazo * aportacionesPorAnio);
-
-      // Calcular por periodo (mes o año según selección)
-      const periodos = tipoPlazo === 'mensual' ? totalMeses : plazo;
-      const labels = tipoPlazo === 'mensual' ? 
-        Array.from({length: periodos}, (_, i) => `Mes ${i+1}`) : 
-        Array.from({length: periodos}, (_, i) => `Año ${i+1}`);
-
-      for (let i = 1; i <= periodos; i++) {
-        let interesPeriodo = 0;
-        let aportacionPeriodo = 0;
-        
-        // Si es cálculo mensual
-        if (tipoPlazo === 'mensual') {
-          // Calcular interés mensual (dividimos la tasa anual entre 12)
-          interesPeriodo = capital * (tasaAnual / 100 / 12);
-          capital += interesPeriodo;
-          totalInteres += interesPeriodo;
-          
-          // Aportaciones según frecuencia
-          if (i % (12 / frecuenciaAportacion) === 0 || frecuenciaAportacion === 12) {
-            capital += aportacionPeriodica;
-            aportacionPeriodo = aportacionPeriodica;
-            totalAportaciones += aportacionPeriodica;
-          }
-        } 
-        // Si es cálculo anual
-        else {
-          // Calcular interés anual compuesto
-          for (let p = 0; p < frecuencia; p++) {
-            const interes = capital * tasaPeriodica;
-            capital += interes;
-            interesPeriodo += interes;
-          }
-          totalInteres += interesPeriodo;
-          
-          // Aportaciones anuales según frecuencia
-          if (frecuenciaAportacion === 12) {
-            // Aportaciones mensuales: sumamos 12 aportaciones al año
-            aportacionPeriodo = aportacionPeriodica * 12;
-          } else if (frecuenciaAportacion === 6) {
-            // Aportaciones bimestrales: sumamos 6 aportaciones al año
-            aportacionPeriodo = aportacionPeriodica * 2;
-          } else if (frecuenciaAportacion === 4) {
-            // Aportaciones trimestrales: sumamos 4 aportaciones al año
-            aportacionPeriodo = aportacionPeriodica * 3;
-          } else if (frecuenciaAportacion === 2) {
-            // Aportaciones semestrales: sumamos 2 aportaciones al año
-            aportacionPeriodo = aportacionPeriodica * 6;
-          } else {
-            // Aportaciones anuales: solo una aportación
-            aportacionPeriodo = aportacionPeriodica;
-          }
-          
-          capital += aportacionPeriodo;
-          totalAportaciones += aportacionPeriodo;
-        }
-
-        resultados.push({
-          periodo: i,
-          capitalInicial: i === 1 ? capitalInicial : 0,
-          aportaciones: aportacionPeriodo,
-          intereses: interesPeriodo,
-          total: capital
-        });
+      // Tasas y factores de cálculo
+      const tasaMensual = tasaAnual / 100 / 12;
+      const aportacionMensual = aportacion;
+      
+      // Determinar cada cuántos meses se hacen aportaciones
+      let frecuenciaAportacionMeses;
+      switch(frecuenciaAportacion) {
+        case 12: frecuenciaAportacionMeses = 1; break;  // Mensual
+        case 6: frecuenciaAportacionMeses = 2; break;   // Bimestral
+        case 4: frecuenciaAportacionMeses = 3; break;   // Trimestral
+        case 2: frecuenciaAportacionMeses = 6; break;   // Semestral
+        case 1: frecuenciaAportacionMeses = 12; break;  // Anual
+        default: frecuenciaAportacionMeses = 1;
       }
 
-      // Actualizar resumen
+      // Calcular mes por mes para mayor precisión
+      for (let mes = 1; mes <= totalPeriodos; mes++) {
+        let interesMes = 0;
+        let aportacionMes = 0;
+        
+        // Calcular interés del mes
+        interesMes = capitalActual * tasaMensual;
+        capitalActual += interesMes;
+        totalInteres += interesMes;
+        
+        // Verificar si este mes corresponde hacer aportación
+        if (mes % frecuenciaAportacionMeses === 0) {
+          capitalActual += aportacionMensual;
+          aportacionMes = aportacionMensual;
+          totalAportaciones += aportacionMensual;
+        }
+
+        // Solo guardar resultados para los periodos que se mostrarán
+        if (esMensual || mes % 12 === 0) {
+          resultados.push({
+            periodo: esMensual ? mes : mes / 12,
+            capitalInicial: mes === 1 ? capitalInicial : 0,
+            aportaciones: aportacionMes,
+            intereses: interesMes,
+            total: capitalActual
+          });
+        }
+      }
+
+      // Si es anual, necesitamos recalcular para mostrar años completos
+      if (!esMensual) {
+        resultados = [];
+        capitalActual = capitalInicial;
+        totalAportaciones = capitalInicial;
+        totalInteres = 0;
+        
+        const tasaPeriodica = tasaAnual / 100 / frecuencia;
+        
+        for (let año = 1; año <= plazo; año++) {
+          let interesAnual = 0;
+          let aportacionAnual = 0;
+          
+          // Calcular interés compuesto para el año
+          let capitalTemp = capitalActual;
+          for (let periodo = 0; periodo < frecuencia; periodo++) {
+            const interes = capitalTemp * tasaPeriodica;
+            capitalTemp += interes;
+            interesAnual += interes;
+          }
+          capitalActual = capitalTemp;
+          totalInteres += interesAnual;
+          
+          // Calcular aportaciones del año
+          switch(frecuenciaAportacion) {
+            case 12: // Mensual
+              aportacionAnual = aportacion * 12;
+              break;
+            case 6: // Bimestral
+              aportacionAnual = aportacion * 6;
+              break;
+            case 4: // Trimestral
+              aportacionAnual = aportacion * 4;
+              break;
+            case 2: // Semestral
+              aportacionAnual = aportacion * 2;
+              break;
+            case 1: // Anual
+              aportacionAnual = aportacion;
+              break;
+          }
+          
+          capitalActual += aportacionAnual;
+          totalAportaciones += aportacionAnual;
+          
+          resultados.push({
+            periodo: año,
+            capitalInicial: año === 1 ? capitalInicial : 0,
+            aportaciones: aportacionAnual,
+            intereses: interesAnual,
+            total: capitalActual
+          });
+        }
+      }
+
+      // Actualizar resumen (ajustar totalAportaciones para no incluir el capital inicial dos veces)
+      const aportacionesNetas = totalAportaciones - capitalInicial;
+      
       document.getElementById('res-inicial').textContent = formatCurrency(capitalInicial);
-      document.getElementById('res-aportaciones').textContent = formatCurrency(totalAportaciones);
+      document.getElementById('res-aportaciones').textContent = formatCurrency(aportacionesNetas);
       document.getElementById('res-intereses').textContent = formatCurrency(totalInteres);
-      document.getElementById('res-total').textContent = formatCurrency(capital);
+      document.getElementById('res-total').textContent = formatCurrency(capitalActual);
 
       // Limitar visualización en tabla si son muchos periodos
-      if (periodos > MAX_PERIODOS_TABLA) {
+      if (resultados.length > MAX_PERIODOS_TABLA) {
         const container = document.querySelector('.results-table-container');
         const existingWarning = document.querySelector('.warning-message');
         
@@ -1361,11 +1398,22 @@
         }
         
         resultados = resultados.slice(0, MAX_PERIODOS_TABLA);
+      } else {
+        // Remover advertencia si ya no es necesaria
+        const existingWarning = document.querySelector('.warning-message');
+        if (existingWarning) {
+          existingWarning.remove();
+        }
       }
+
+      // Generar etiquetas para el gráfico
+      const labels = esMensual ? 
+        Array.from({length: resultados.length}, (_, i) => `Mes ${i+1}`) : 
+        Array.from({length: resultados.length}, (_, i) => `Año ${i+1}`);
 
       // Generar gráfico y tabla
       generarGraficoBarras(resultados, labels);
-      generarTabla(resultados, tipoPlazo === 'mensual');
+      generarTabla(resultados, esMensual);
     }
 
     function mostrarError(inputId, mensaje) {
@@ -1388,7 +1436,7 @@
         chartBarras.destroy();
       }
       
-      // Preparar datos para el gráfico (modificado para mostrar depósito inicial en todos los periodos)
+      // Preparar datos para el gráfico
       const datosInicial = datos.map(() => datos[0].capitalInicial);
       
       // Calcular valores acumulativos para aportaciones e intereses
@@ -1417,7 +1465,13 @@
             },
             ticks: {
               maxRotation: 45,
-              minRotation: 45
+              minRotation: 45,
+              // Para muchos periodos, mostrar menos etiquetas
+              callback: function(value, index, values) {
+                // Mostrar solo cada 5 etiquetas cuando hay muchas
+                if (values.length > 24 && index % 5 !== 0) return '';
+                return this.getLabelForValue(value);
+              }
             }
           },
           y: {
