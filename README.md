@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -262,15 +261,9 @@
       -webkit-appearance: none;
     }
   
-    /* Estilo específico para inputs numéricos en móviles */
-    input[type="number"] {
+    /* Estilo específico para inputs monetarios */
+    input[type="text"] {
       -moz-appearance: textfield;
-    }
-    
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
     }
   
     body.dark input,
@@ -785,8 +778,8 @@
           </div>
         </h3>
         <div class="input-group">
-          <!-- Cambiado a type="number" para teclado numérico en móviles -->
-          <input type="number" id="capitalInicial" step="0.01" placeholder="0">
+          <!-- Cambiado a type="text" para formato de moneda -->
+          <input type="text" id="capitalInicial" placeholder="$0" inputmode="numeric">
         </div>
         <div class="input-group">
           <label for="tasa">Tasa de interés anual (%):
@@ -854,8 +847,8 @@
               <span class="tooltip-text">Cantidad que aportarás periódicamente</span>
             </div>
           </label>
-          <!-- Cambiado a type="number" para teclado numérico en móviles -->
-          <input type="number" id="aportacion" step="0.01" placeholder="0">
+          <!-- Cambiado a type="text" para formato de moneda -->
+          <input type="text" id="aportacion" placeholder="$0" inputmode="numeric">
         </div>
         <div class="input-group">
           <label for="frecuenciaAportacion">Frecuencia de aportación:
@@ -1083,7 +1076,14 @@
         input.addEventListener('input', calcular);
       });
 
-      // Eliminados los event listeners de formateo de moneda ya que ahora usamos type="number"
+      // Configura formateo de moneda para depósito inicial y aportaciones
+      document.getElementById('capitalInicial').addEventListener('input', function() {
+        formatearMoneda(this);
+      });
+      
+      document.getElementById('aportacion').addEventListener('input', function() {
+        formatearMoneda(this);
+      });
 
       // Cambiar label de plazo según selección y habilitar/deshabilitar input
       document.getElementById('tipoPlazo').addEventListener('change', function() {
@@ -1215,19 +1215,45 @@
       }
     }
 
-    // Eliminada la función formatearMoneda ya que ahora usamos type="number"
+    function formatearMoneda(input) {
+      // Guardar posición del cursor
+      const cursorPosition = input.selectionStart;
+      
+      // Eliminar todos los caracteres no numéricos excepto el punto decimal
+      let valor = input.value.replace(/[^0-9.]/g, '');
+      
+      // Si está vacío, dejar vacío
+      if(valor === '') {
+        input.value = '';
+        return;
+      }
+      
+      // Convertir a número y formatear
+      const numero = parseFloat(valor);
+      if (isNaN(numero)) {
+        input.value = '';
+        return;
+      }
+      
+      // Formatear con $ y separadores de miles
+      input.value = '$' + new Intl.NumberFormat('es-MX').format(numero);
+      
+      // Restaurar posición del cursor, ajustando por los caracteres añadidos
+      const newCursorPosition = cursorPosition + (input.value.length - valor.length);
+      input.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
 
     function calcular() {
       // Limpiar mensajes de error previos
       document.querySelectorAll('.error-mensaje').forEach(el => el.remove());
       
       // Obtener valores de los inputs
-      const capitalInicial = parseFloat(document.getElementById('capitalInicial').value) || 0;
+      const capitalInicial = parseFloat(document.getElementById('capitalInicial').value.replace(/[^0-9.]/g, '')) || 0;
       const tasaAnual = parseFloat(document.getElementById('tasa').value) || 0;
       const tipoPlazo = document.getElementById('tipoPlazo').value;
       const plazo = parseInt(document.getElementById('plazo').value) || 0;
       const frecuencia = parseInt(document.getElementById('frecuencia').value) || 12;
-      const aportacion = parseFloat(document.getElementById('aportacion').value) || 0;
+      const aportacion = parseFloat(document.getElementById('aportacion').value.replace(/[^0-9.]/g, '')) || 0;
       const frecuenciaAportacion = parseInt(document.getElementById('frecuenciaAportacion').value) || 12;
 
       // Validaciones
